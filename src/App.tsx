@@ -8,6 +8,7 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 function App() {
   const [count, setCount] = useState(0);
   const [log, setLog] = useState<string[]>([]);
+  const [todaysPic, setTodaysPic] = useState<{image_url: string, description: string} | null>(null);
 
   const addLogEntry = (message: string) => {
     setLog((prevLog) => [
@@ -50,8 +51,21 @@ function App() {
     }
   };
 
+  const fetchTodaysPic = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/todays_pic`);
+      const data = await response.json();
+      setTodaysPic(data);
+      addLogEntry(`GET ${API_BASE_URL}/todays_pic - Fetched today's picture`);
+    } catch (error) {
+      console.error("Error fetching today's picture:", error);
+      addLogEntry(`GET ${API_BASE_URL}/todays_pic - Error fetching picture: ${error}`);
+    }
+  };
+
   useEffect(() => {
     fetchCounter();
+    fetchTodaysPic();
   }, []);
 
   return (
@@ -108,6 +122,24 @@ function App() {
             </ul>
           </CardContent>
         </Card>
+
+        {todaysPic && (
+          <Card className="w-full max-w-md bg-gray-900 border-gray-800">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-center text-white">
+                Picture of the Day
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <img 
+                src={todaysPic.image_url} 
+                alt={todaysPic.description}
+                className="w-full rounded-lg mb-4"
+              />
+              <p className="text-sm text-gray-400">{todaysPic.description}</p>
+            </CardContent>
+          </Card>
+        )}
       </main>
 
       <footer className="bg-gray-900 text-white py-6 text-center">
