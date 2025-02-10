@@ -10,7 +10,10 @@ function App() {
   const [log, setLog] = useState<string[]>([]);
   const [todaysPic, setTodaysPic] = useState<{
     image_url: string;
-    description: string;
+    description: {
+      name: string;
+      artist: string;
+    };
   } | null>(null);
 
   const addLogEntry = (message: string) => {
@@ -146,7 +149,9 @@ function App() {
                 alt={todaysPic.description}
                 className="w-full rounded-lg mb-4"
               />
-              <p className="text-sm text-gray-400">{todaysPic.description}</p>
+              <p className="text-sm text-gray-400">
+                {todaysPic.description.name} by {todaysPic.description.artist}
+              </p>
             </CardContent>
           </Card>
         )}
