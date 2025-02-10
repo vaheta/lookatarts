@@ -8,7 +8,10 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "/api";
 function App() {
   const [count, setCount] = useState(0);
   const [log, setLog] = useState<string[]>([]);
-  const [todaysPic, setTodaysPic] = useState<{image_url: string, description: string} | null>(null);
+  const [todaysPic, setTodaysPic] = useState<{
+    image_url: string;
+    description: string;
+  } | null>(null);
 
   const addLogEntry = (message: string) => {
     setLog((prevLog) => [
@@ -53,13 +56,20 @@ function App() {
 
   const fetchTodaysPic = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/todays_pic`);
+      console.log(`${API_BASE_URL}/todays_pic/metadata`);
+      const response = await fetch(`${API_BASE_URL}/todays_pic/metadata`);
       const data = await response.json();
-      setTodaysPic(data);
+      setTodaysPic({
+        image_url: data.image_url,
+        description: data.description,
+      });
+      console.log(todaysPic);
       addLogEntry(`GET ${API_BASE_URL}/todays_pic - Fetched today's picture`);
     } catch (error) {
       console.error("Error fetching today's picture:", error);
-      addLogEntry(`GET ${API_BASE_URL}/todays_pic - Error fetching picture: ${error}`);
+      addLogEntry(
+        `GET ${API_BASE_URL}/todays_pic - Error fetching picture: ${error}`,
+      );
     }
   };
 
@@ -106,7 +116,7 @@ function App() {
           </CardContent>
         </Card>
 
-        <Card className="w-full max-w-md bg-gray-900 border-gray-800">
+        {/* <Card className="w-full max-w-md bg-gray-900 border-gray-800">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center text-white">
               API Request Log
@@ -121,7 +131,7 @@ function App() {
               ))}
             </ul>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {todaysPic && (
           <Card className="w-full max-w-md bg-gray-900 border-gray-800">
@@ -131,8 +141,8 @@ function App() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <img 
-                src={todaysPic.image_url} 
+              <img
+                src={todaysPic.image_url}
                 alt={todaysPic.description}
                 className="w-full rounded-lg mb-4"
               />
@@ -143,15 +153,7 @@ function App() {
       </main>
 
       <footer className="bg-gray-900 text-white py-6 text-center">
-        <p>
-          Made with ❤️ by{" "}
-          <a
-            href="https://x.com/mattppal"
-            className="font-bold hover:text-gray-200 transition-colors"
-          >
-            Matt
-          </a>
-        </p>
+        <p>Footer</p>
       </footer>
     </div>
   );
