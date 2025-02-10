@@ -81,8 +81,12 @@ function App() {
     fetchTodaysPic();
   }, []);
 
+  if (todaysPic) {
+    console.log(`${API_BASE_URL}/images/${todaysPic.image_url}`);
+  }
+
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="bg-black text-white flex flex-col">
       <main className="flex-grow flex flex-col items-center justify-center p-8 pt-4 space-y-12">
         <section className="max-w-2xl text-center px-4">
           <p className="text-gray-400">
@@ -145,8 +149,8 @@ function App() {
             </CardHeader>
             <CardContent>
               <img
-                src={todaysPic.image_url}
-                alt={todaysPic.description}
+                src={`${API_BASE_URL}/${encodeURIComponent(todaysPic.image_url)}`}
+                alt={todaysPic.description.name}
                 className="w-full rounded-lg mb-4"
               />
               <p className="text-sm text-gray-400">
