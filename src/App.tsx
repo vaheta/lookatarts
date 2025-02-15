@@ -88,21 +88,25 @@ function App() {
   return (
     <div className="bg-black text-white flex flex-col">
       <main className="flex-grow flex flex-col items-center justify-center p-8 pt-4 space-y-12">
-        <section className="max-w-2xl text-center px-4">
-          <p className="text-gray-400">
-            This is an example of a React Frontend with a FastAPI backend on
-            Replit. <br />
-            Check out the code{" "}
-            <a
-              href="https://replit.com/@matt/Matts-Fullstack-Repl-Front-Backend?v=1"
-              target="_blank"
-              className="font-bold text-white hover:text-gray-200 transition-colors"
-            >
-              here
-            </a>
-            .
-          </p>
-        </section>
+        {todaysPic && (
+          <Card className="w-full max-w-md bg-gray-900 border-gray-800">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold text-center text-white">
+                Picture of the Day
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <img
+                src={`${API_BASE_URL}/images/${todaysPic.image_url}`}
+                alt={todaysPic.description.name}
+                className="w-full rounded-lg mb-4"
+              />
+              <p className="text-sm text-gray-400">
+                {todaysPic.description.name} by {todaysPic.description.artist}
+              </p>
+            </CardContent>
+          </Card>
+        )}
 
         <Card className="w-full max-w-md bg-gray-900 border-gray-800">
           <CardHeader>
@@ -123,7 +127,7 @@ function App() {
           </CardContent>
         </Card>
 
-        {/* <Card className="w-full max-w-md bg-gray-900 border-gray-800">
+        <Card className="w-full max-w-md bg-gray-900 border-gray-800">
           <CardHeader>
             <CardTitle className="text-2xl font-bold text-center text-white">
               API Request Log
@@ -138,27 +142,7 @@ function App() {
               ))}
             </ul>
           </CardContent>
-        </Card> */}
-
-        {todaysPic && (
-          <Card className="w-full max-w-md bg-gray-900 border-gray-800">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold text-center text-white">
-                Picture of the Day
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <img
-                src={`${API_BASE_URL}/${encodeURIComponent(todaysPic.image_url)}`}
-                alt={todaysPic.description.name}
-                className="w-full rounded-lg mb-4"
-              />
-              <p className="text-sm text-gray-400">
-                {todaysPic.description.name} by {todaysPic.description.artist}
-              </p>
-            </CardContent>
-          </Card>
-        )}
+        </Card>
       </main>
 
       <footer className="bg-gray-900 text-white py-6 text-center">
