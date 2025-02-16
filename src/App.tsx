@@ -144,8 +144,8 @@ function App() {
             )}
 
             {meditationState === "meditating" && (
-              <div className="relative">
-                <div className="fixed top-4 left-1/2 -translate-x-1/2 z-10 bg-gray-900/80 px-4 py-2 rounded-full backdrop-blur-sm">
+              <div className="fixed inset-0">
+                <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10 bg-gray-900/80 px-4 py-2 rounded-full backdrop-blur-sm">
                   <span className="text-xl font-mono">{formatTime(elapsedTime)}</span>
                 </div>
                 <TransformWrapper
@@ -154,7 +154,7 @@ function App() {
                   maxScale={2}
                 >
                   <TransformComponent
-                    wrapperClass="!w-full !h-[calc(100vh-8rem)]"
+                    wrapperClass="!w-screen !h-screen"
                     contentClass="!w-full !h-full"
                   >
                     <img
@@ -164,7 +164,7 @@ function App() {
                     />
                   </TransformComponent>
                 </TransformWrapper>
-                <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-10">
+                <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10">
                   <Button
                     onClick={stopMeditation}
                     className="bg-white text-black hover:bg-gray-200 rounded-full w-12 h-12 p-0"
