@@ -87,7 +87,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <main className="container mx-auto px-4 py-8">
+      <main className="h-screen">
         <AnimatePresence mode="wait">
           <motion.div
             key={meditationState}
@@ -97,7 +97,7 @@ function App() {
             transition={{ duration: 0.5 }}
           >
             {meditationState === "idle" && (
-              <div className="max-w-2xl mx-auto space-y-8">
+              <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
                 <Card className="bg-gray-900 border-gray-800">
                   <CardHeader>
                     <CardTitle className="text-2xl font-bold text-center text-white">
@@ -176,7 +176,7 @@ function App() {
             )}
 
             {meditationState === "completed" && (
-              <div className="max-w-md mx-auto">
+              <div className="max-w-md mx-auto px-4 py-8">
                 <Card className="bg-gray-900 border-gray-800">
                   <CardHeader>
                     <CardTitle className="text-2xl font-bold text-center text-white">
