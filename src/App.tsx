@@ -122,6 +122,7 @@ function App() {
                           <SelectValue placeholder="Select duration" />
                         </SelectTrigger>
                         <SelectContent>
+                          <SelectItem value="5">5 seconds</SelectItem>
                           <SelectItem value="300">5 minutes</SelectItem>
                           <SelectItem value="450">7:30 minutes</SelectItem>
                           <SelectItem value="600">10 minutes</SelectItem>
