@@ -159,7 +159,8 @@ function App() {
                 <TransformWrapper
                   initialScale={1}
                   minScale={0.5}
-                  maxScale={2}
+                  maxScale={3}
+                  smooth={true}
                 >
                   <TransformComponent
                     wrapperClass="!w-screen !h-screen"
