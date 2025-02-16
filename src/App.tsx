@@ -105,22 +105,11 @@ function App() {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
-                    <TransformWrapper
-                      initialScale={1}
-                      minScale={0.5}
-                      maxScale={2}
-                    >
-                      <TransformComponent
-                        wrapperClass="!w-full !h-[400px]"
-                        contentClass="!w-full !h-full"
-                      >
-                        <img
-                          src={`${API_BASE_URL}/images/${todaysPic.image_url}`}
-                          alt={todaysPic.description.name}
-                          className="w-full h-full object-contain"
-                        />
-                      </TransformComponent>
-                    </TransformWrapper>
+                    <img
+                      src={`${API_BASE_URL}/images/${todaysPic.image_url}`}
+                      alt={todaysPic.description.name}
+                      className="w-full rounded-lg"
+                    />
                     <p className="text-sm text-gray-400 text-center">
                       {todaysPic.description.name} by {todaysPic.description.artist}
                     </p>
@@ -155,30 +144,26 @@ function App() {
             )}
 
             {meditationState === "meditating" && (
-              <div className="max-w-2xl mx-auto space-y-8">
+              <div className="relative">
                 <div className="fixed top-4 left-1/2 -translate-x-1/2 z-10 bg-gray-900/80 px-4 py-2 rounded-full backdrop-blur-sm">
                   <span className="text-xl font-mono">{formatTime(elapsedTime)}</span>
                 </div>
-                <Card className="bg-gray-900 border-gray-800">
-                  <CardContent className="pt-8">
-                    <TransformWrapper
-                      initialScale={1}
-                      minScale={0.5}
-                      maxScale={2}
-                    >
-                      <TransformComponent
-                        wrapperClass="!w-full !h-[400px]"
-                        contentClass="!w-full !h-full"
-                      >
-                        <img
-                          src={`${API_BASE_URL}/images/${todaysPic.image_url}`}
-                          alt={todaysPic.description.name}
-                          className="w-full h-full object-contain"
-                        />
-                      </TransformComponent>
-                    </TransformWrapper>
-                  </CardContent>
-                </Card>
+                <TransformWrapper
+                  initialScale={1}
+                  minScale={0.5}
+                  maxScale={2}
+                >
+                  <TransformComponent
+                    wrapperClass="!w-full !h-[calc(100vh-8rem)]"
+                    contentClass="!w-full !h-full"
+                  >
+                    <img
+                      src={`${API_BASE_URL}/images/${todaysPic.image_url}`}
+                      alt={todaysPic.description.name}
+                      className="w-full h-full object-contain"
+                    />
+                  </TransformComponent>
+                </TransformWrapper>
                 <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-10">
                   <Button
                     onClick={stopMeditation}
