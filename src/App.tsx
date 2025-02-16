@@ -159,7 +159,7 @@ function App() {
                 <TransformWrapper
                   initialScale={1}
                   minScale={0.5}
-                  maxScale={3}
+                  maxScale={4}
                   smooth={true}
                 >
                   <TransformComponent
