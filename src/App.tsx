@@ -49,13 +49,20 @@ function App() {
     let timer: number;
     if (meditationState === "meditating") {
       timer = window.setInterval(() => {
-        setElapsedTime((prev) => prev + 1);
+        setElapsedTime((prev) => {
+          const newTime = prev + 1;
+          if (newTime >= parseInt(duration)) {
+            stopMeditation();
+            return parseInt(duration);
+          }
+          return newTime;
+        });
       }, 1000);
     }
     return () => {
       if (timer) clearInterval(timer);
     };
-  }, [meditationState]);
+  }, [meditationState, duration]);
 
   const startMeditation = () => {
     setElapsedTime(0);
