@@ -1,9 +1,8 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/useIsMobile";
-import { useTimer } from "@/hooks/useTimer";
-import { useImageLoader } from "@/hooks/useImageLoader";
-import { useMeditation } from "@/hooks/useMeditation";
+import { useMeditation } from "@/contexts/MeditationContext";
+import { useUI } from "@/contexts/UIContext";
 import { Timer } from "@/components/Timer";
 import { ImageDisplay } from "@/components/ImageDisplay";
 import { CompletionScreen } from "@/components/CompletionScreen";
@@ -12,36 +11,27 @@ import { PanAnimation } from "@/components/PanAnimation";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { StopButton } from "@/components/StopButton";
 import { fetchTodaysPic } from "@/services/api";
-import { TodaysPic } from "@/types";
 
 function App() {
   const isMobile = useIsMobile();
-  const [todaysPic, setTodaysPic] = useState<TodaysPic>(null);
-  const [duration, setDuration] = useState("600"); // 10 minutes in seconds
-  const [isLoading, setIsLoading] = useState(true);
-  const [showTimer, setShowTimer] = useState(true);
-  const [isTimerHovered, setIsTimerHovered] = useState(false);
-  const [isStopButtonHovered, setIsStopButtonHovered] = useState(false);
-
   const {
     meditationState,
     hasInteracted,
     showPanAnimation,
-    setShowPanAnimation,
-    startMeditation,
-    stopMeditation,
-    resetMeditation,
-    handleInteraction,
+    todaysPic,
+    isLoading,
+    formattedTime,
+    setTodaysPic,
+    setIsLoading,
   } = useMeditation();
 
-  const { isImageLoaded, handleImageLoad } = useImageLoader();
+  const {
+    showTimer,
+    setIsTimerHovered,
+    setIsStopButtonHovered,
+  } = useUI();
 
-  const { elapsedTime, resetTimer, formatTime } = useTimer(
-    duration,
-    meditationState,
-    stopMeditation
-  );
-
+  // Load today's picture
   useEffect(() => {
     const loadTodaysPic = async () => {
       setIsLoading(true);
@@ -54,31 +44,7 @@ function App() {
     };
 
     loadTodaysPic();
-  }, []);
-
-  useEffect(() => {
-    if (meditationState === "meditating") {
-      setShowTimer(
-        elapsedTime <= 5 || // show during first 5 seconds
-        elapsedTime >= parseInt(duration) - 30 || // show during last 30 seconds
-        isStopButtonHovered || // show when hovering stop button
-        isTimerHovered, // show when hovering timer area
-      );
-
-      // Handle pan animation visibility
-      if (elapsedTime > 30) {
-        setShowPanAnimation(false);
-      }
-    }
-  }, [elapsedTime, duration, meditationState, isStopButtonHovered, isTimerHovered, setShowPanAnimation]);
-
-  const handleStartMeditation = () => {
-    resetTimer();
-    startMeditation();
-    setShowTimer(true);
-    setIsStopButtonHovered(false);
-    setShowPanAnimation(true);
-  };
+  }, [setIsLoading, setTodaysPic]);
 
   if (isLoading) {
     return <LoadingScreen />;
@@ -114,11 +80,10 @@ function App() {
           <>
             <Timer
               showTimer={showTimer}
-              formattedTime={formatTime(elapsedTime)}
+              formattedTime={formattedTime}
               onTimerHover={setIsTimerHovered}
             />
             <StopButton
-              onStop={stopMeditation}
               onHover={setIsStopButtonHovered}
             />
           </>
@@ -126,11 +91,7 @@ function App() {
 
         <AnimatePresence mode="wait">
           {meditationState === "completed" ? (
-            <CompletionScreen
-              todaysPic={todaysPic}
-              formattedTime={formatTime(elapsedTime, true)}
-              onReset={resetMeditation}
-            />
+            <CompletionScreen />
           ) : (
             <div
               key="imageContent"
@@ -141,23 +102,10 @@ function App() {
               }`}
             >
               {meditationState === "idle" ? (
-                <StartScreen
-                  todaysPic={todaysPic}
-                  isImageLoaded={isImageLoaded}
-                  onImageLoad={handleImageLoad}
-                  duration={duration}
-                  onDurationChange={setDuration}
-                  onStart={handleStartMeditation}
-                />
+                <StartScreen />
               ) : (
                 meditationState === "meditating" && (
-                  <ImageDisplay
-                    todaysPic={todaysPic}
-                    isImageLoaded={isImageLoaded}
-                    onImageLoad={handleImageLoad}
-                    isMobile={isMobile}
-                    onInteraction={handleInteraction}
-                  />
+                  <ImageDisplay />
                 )
               )}
             </div>

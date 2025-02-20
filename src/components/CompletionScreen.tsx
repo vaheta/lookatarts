@@ -2,13 +2,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "lucide-react";
 import { API_BASE_URL } from "@/config";
-import { TodaysPic } from "@/types";
-
-type CompletionScreenProps = {
-  todaysPic: NonNullable<TodaysPic>;
-  formattedTime: string;
-  onReset: () => void;
-};
+import { useMeditation } from "@/contexts/MeditationContext";
 
 const childVariant = {
   hidden: { opacity: 0, y: 20 },
@@ -30,11 +24,11 @@ const childVariant = {
   }
 };
 
-export function CompletionScreen({
-  todaysPic,
-  formattedTime,
-  onReset,
-}: CompletionScreenProps) {
+export function CompletionScreen() {
+  const { todaysPic, formattedTime, resetMeditation } = useMeditation();
+
+  if (!todaysPic) return null;
+
   return (
     <motion.div
       key="completed"
@@ -135,7 +129,7 @@ export function CompletionScreen({
 
           <motion.div variants={childVariant} className="text-center">
             <Button
-              onClick={onReset}
+              onClick={resetMeditation}
               className="bg-black text-white hover:bg-gray-800"
             >
               Return Home

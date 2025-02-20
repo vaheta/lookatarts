@@ -9,16 +9,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { API_BASE_URL, MEDITATION_DURATIONS } from "@/config";
-import { TodaysPic } from "@/types";
-
-type StartScreenProps = {
-  todaysPic: NonNullable<TodaysPic>;
-  isImageLoaded: boolean;
-  onImageLoad: () => void;
-  duration: string;
-  onDurationChange: (value: string) => void;
-  onStart: () => void;
-};
+import { useMeditation } from "@/contexts/MeditationContext";
+import { useUI } from "@/contexts/UIContext";
 
 const childVariant = {
   hidden: { opacity: 0, y: 20 },
@@ -33,14 +25,12 @@ const childVariant = {
   },
 };
 
-export function StartScreen({
-  todaysPic,
-  isImageLoaded,
-  onImageLoad,
-  duration,
-  onDurationChange,
-  onStart,
-}: StartScreenProps) {
+export function StartScreen() {
+  const { todaysPic, duration, setDuration, startMeditation } = useMeditation();
+  const { isImageLoaded, setIsImageLoaded } = useUI();
+
+  if (!todaysPic) return null;
+
   return (
     <motion.div
       initial="hidden"
@@ -84,12 +74,12 @@ export function StartScreen({
             className={`w-full h-full rounded-sm object-contain transition-opacity duration-300 ${
               isImageLoaded ? "opacity-100" : "opacity-0"
             }`}
-            onLoad={onImageLoad}
+            onLoad={() => setIsImageLoaded(true)}
           />
           {isImageLoaded && (
             <div className="absolute inset-0 flex flex-col items-center justify-center space-y-4">
               <Button
-                onClick={onStart}
+                onClick={startMeditation}
                 variant="outline"
                 size="icon"
                 className="h-20 w-20 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white/90 shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out hover:scale-105 transform motion-safe:hover:scale-105 motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.34,1.56,0.64,1)]"
@@ -98,7 +88,7 @@ export function StartScreen({
               </Button>
               <Select
                 value={duration}
-                onValueChange={onDurationChange}
+                onValueChange={setDuration}
               >
                 <SelectTrigger className="w-fit min-w-[140px] bg-white/80 backdrop-blur-sm rounded-full">
                   <SelectValue placeholder="Select duration" />

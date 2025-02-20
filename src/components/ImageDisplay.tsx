@@ -1,22 +1,16 @@
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
 import { API_BASE_URL } from "@/config";
-import { TodaysPic } from "@/types";
+import { useMeditation } from "@/contexts/MeditationContext";
+import { useUI } from "@/contexts/UIContext";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
-type ImageDisplayProps = {
-  todaysPic: NonNullable<TodaysPic>;
-  isImageLoaded: boolean;
-  onImageLoad: () => void;
-  isMobile: boolean;
-  onInteraction: () => void;
-};
+export function ImageDisplay() {
+  const { todaysPic, handleInteraction } = useMeditation();
+  const { isImageLoaded, setIsImageLoaded } = useUI();
+  const isMobile = useIsMobile();
 
-export function ImageDisplay({
-  todaysPic,
-  isImageLoaded,
-  onImageLoad,
-  isMobile,
-  onInteraction,
-}: ImageDisplayProps) {
+  if (!todaysPic) return null;
+
   return (
     <div className="relative w-full">
       <TransformWrapper
@@ -24,8 +18,8 @@ export function ImageDisplay({
         minScale={0.8}
         maxScale={isMobile ? 6 : 4}
         smooth={true}
-        onPanningStart={onInteraction}
-        onZoomStart={onInteraction}
+        onPanningStart={handleInteraction}
+        onZoomStart={handleInteraction}
       >
         <TransformComponent
           wrapperClass="!w-full !h-full"
@@ -50,7 +44,7 @@ export function ImageDisplay({
                 className={`max-h-[80vh] w-auto rounded-sm transition-opacity duration-300 ${
                   isImageLoaded ? "opacity-100" : "opacity-0"
                 }`}
-                onLoad={onImageLoad}
+                onLoad={() => setIsImageLoaded(true)}
               />
             </div>
           </div>
