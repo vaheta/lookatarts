@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from "react";
+import { createContext, useContext, useState, ReactNode, useEffect } from "react";
 import { useMeditation } from "./MeditationContext";
 
 interface UIContextType {
