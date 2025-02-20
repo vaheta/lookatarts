@@ -149,6 +149,7 @@ function App() {
 
   const stopMeditation = () => {
     setMeditationState("completed");
+    setShowPanAnimation(false);
   };
 
   const resetMeditation = () => {
