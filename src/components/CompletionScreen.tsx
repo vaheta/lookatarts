@@ -25,9 +25,15 @@ const childVariant = {
 };
 
 export function CompletionScreen() {
-  const { todaysPic, formattedTime, resetMeditation } = useMeditation();
+  const { todaysPic, formattedTime, resetMeditation, elapsedTime, duration } = useMeditation();
 
   if (!todaysPic) return null;
+  
+  // Calculate percentage of planned time completed
+  const plannedTimeInSeconds = parseInt(duration);
+  const percentageCompleted = plannedTimeInSeconds > 0 
+    ? Math.round((elapsedTime / plannedTimeInSeconds) * 100) 
+    : 0;
 
   return (
     <motion.div
@@ -74,7 +80,7 @@ export function CompletionScreen() {
                 variants={childVariant}
                 className="text-gray-600"
               >
-                Learn more about this art piece
+                {percentageCompleted}% of planned session
               </motion.p>
             </div>
           </motion.div>
