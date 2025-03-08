@@ -7,18 +7,17 @@ import { MainLayout } from "@/components/layout/MainLayout";
 import { MeditationControlsOverlay } from "@/components/MeditationControlsOverlay";
 
 export function MeditationPage() {
-  const { todaysPic, handleInteraction, formatElapsedAndTotalTime } = useMeditation();
-  const { isImageLoaded, setIsImageLoaded} = useUI();
+  const { todaysPic, handleInteraction, formatElapsedAndTotalTime } =
+    useMeditation();
+  const { isImageLoaded, setIsImageLoaded } = useUI();
   const isMobile = useIsMobile();
 
   if (!todaysPic) return null;
 
   return (
     <MainLayout hideHeaderFooter>
-      <MeditationControlsOverlay 
-        formattedTime={formatElapsedAndTotalTime()}
-      />
-      
+      <MeditationControlsOverlay formattedTime={formatElapsedAndTotalTime()} />
+
       <div className="relative w-full">
         <TransformWrapper
           initialScale={isMobile ? 1 : 1}
@@ -29,13 +28,15 @@ export function MeditationPage() {
           onZoomStart={handleInteraction}
         >
           <TransformComponent
-            wrapperClass="w-screen h-screen"
+            wrapperClass="!w-screen !h-screen"
             contentClass="w-full h-full flex items-center justify-center p-8"
           >
-            <div className="relative bg-white rounded-lg shadow-[0_0_40px_rgba(0,0,0,0.1),0_0_12px_rgba(0,0,0,0.05)] border-white w-fit" 
+            <div
+              className="relative bg-white rounded-lg shadow-[0_0_40px_rgba(0,0,0,0.1),0_0_12px_rgba(0,0,0,0.05)] border-white w-fit"
               style={{
-                borderWidth: isMobile ? '1px' : '12px'
-              }}>
+                borderWidth: isMobile ? "1px" : "12px",
+              }}
+            >
               <div className="absolute inset-0 shadow-inner"></div>
               <div
                 className="relative"
@@ -63,4 +64,4 @@ export function MeditationPage() {
       </div>
     </MainLayout>
   );
-} 
+}
