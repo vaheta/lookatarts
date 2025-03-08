@@ -3,6 +3,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUI } from "@/contexts/UIContext";
 import { useEffect } from "react";
+import { springTransition, childVariant, staggerContainerVariant } from "../utils/animations";
 
 export function AboutModal() {
   const { isAboutModalOpen, closeAboutModal } = useUI();
@@ -41,13 +42,27 @@ export function AboutModal() {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ type: "spring", damping: 20, stiffness: 300 }}
+              transition={springTransition}
               className="relative p-8 rounded-lg max-w-md w-full m-4 z-10 flex flex-col items-center"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="space-y-8">
-                <h2 className="text-4xl font-serif text-center">LooksAtArts.com</h2>
-                <div className="text-sm text-gray-700 space-y-4">
+              <motion.div 
+                className="space-y-8"
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                variants={staggerContainerVariant}
+              >
+                <motion.h2 
+                  className="text-4xl font-serif text-center"
+                  variants={childVariant}
+                >
+                  LooksAtArts.com
+                </motion.h2>
+                <motion.div 
+                  className="text-sm text-gray-700 space-y-4"
+                  variants={childVariant}
+                >
                   <p>
                     We've created this space as an invitation to pause. To look deeply. Whether you have five minutes or fifty, we hope visual meditation with LookAtArts helps you carve out moments of presence in your day through the contemplative power of art.
                   </p>
@@ -68,24 +83,27 @@ export function AboutModal() {
                   <p className="italic">
                     ~Two friends with a shared passion for art and meditation
                   </p>
-                  <br/> 
-                  <div className="pt-8 pb-4 border-t border-gray-100 mt-8">
-                    <p className="text-gray-500 text-center">
-                      P.S. Have a feature request or just want to chat? <br/> Say hi at{" "}
-                      <Button
-                        variant="link"
-                        className="p-0 h-auto"
-                        asChild
-                      >
-                        <a href="mailto:hello@lookatarts.com">
-                          hello@lookatarts.com{" "}
-                          <ArrowUpRight className="w-4 h-4 ml-1" />
-                        </a>
-                      </Button>
-                    </p>
-                  </div>
-                </div>
-              </div>
+                </motion.div>
+                <br/> 
+                <motion.div 
+                  className="pt-8 pb-4 border-t border-gray-100 mt-8"
+                  variants={childVariant}
+                >
+                  <p className="text-gray-500 text-center">
+                    P.S. Have a feature request or just want to chat? <br/> Say hi at{" "}
+                    <Button
+                      variant="link"
+                      className="p-0 h-auto"
+                      asChild
+                    >
+                      <a href="mailto:hello@lookatarts.com">
+                        hello@lookatarts.com{" "}
+                        <ArrowUpRight className="w-4 h-4 ml-1" />
+                      </a>
+                    </Button>
+                  </p>
+                </motion.div>
+              </motion.div>
               
             </motion.div>
           </div>

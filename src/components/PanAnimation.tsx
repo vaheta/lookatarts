@@ -1,48 +1,11 @@
 import { motion } from "framer-motion";
 import Lottie from "lottie-react";
 import panAnimation from "@/assets/PanAnimation.json";
+import { childVariant, staggerContainerVariant } from "@/utils/animations";
 
 type PanAnimationProps = {
   show: boolean;
   isMobile: boolean;
-};
-
-const containerVariant = {
-  hidden: { opacity: 0 },
-  visible: { 
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    }
-  },
-  exit: {
-    opacity: 0,
-    transition: {
-      staggerChildren: 0.05,
-      staggerDirection: -1,
-      when: "afterChildren"
-    }
-  }
-};
-
-const childVariant = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "spring",
-      stiffness: 150,
-      damping: 30,
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: -20,
-    transition: {
-      duration: 0.4,
-    }
-  }
 };
 
 export function PanAnimation({ show, isMobile }: PanAnimationProps) {
@@ -50,7 +13,7 @@ export function PanAnimation({ show, isMobile }: PanAnimationProps) {
 
   return (
     <motion.div
-      variants={containerVariant}
+      variants={staggerContainerVariant}
       initial="hidden"
       animate="visible"
       exit="exit"

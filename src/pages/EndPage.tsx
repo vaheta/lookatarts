@@ -4,26 +4,7 @@ import { ArrowUpRight } from "lucide-react";
 import { API_BASE_URL } from "@/config";
 import { useMeditation } from "@/contexts/MeditationContext";
 import { MainLayout } from "@/components/layout/MainLayout";
-
-const childVariant = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "spring",
-      stiffness: 150,
-      damping: 30,
-    },
-  },
-  exit: {
-    opacity: 0,
-    y: -20,
-    transition: {
-      duration: 0.4,
-    }
-  }
-};
+import { childVariant, staggerContainerVariant } from "@/utils/animations";
 
 export function EndPage() {
   const { todaysPic, resetMeditation, elapsedTime, duration, formatElapsedTime } = useMeditation();
@@ -42,24 +23,12 @@ export function EndPage() {
         key="completed"
         initial="hidden"
         animate="visible"
-        variants={{
-          hidden: { opacity: 1 },
-          visible: { opacity: 1 },
-        }}
+        variants={staggerContainerVariant}
         className="w-full flex-1 flex items-center"
       >
         <div className="max-w-5xl mx-auto px-4 py-8 w-full">
           <motion.div
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: {
-                opacity: 1,
-                y: 0,
-                transition: {
-                  staggerChildren: 0.1,
-                },
-              },
-            }}
+            variants={staggerContainerVariant}
             className="space-y-8"
           >
             <motion.div

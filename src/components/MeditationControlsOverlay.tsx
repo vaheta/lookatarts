@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useMeditation } from "@/contexts/MeditationContext";
 import { useUI } from "@/contexts/UIContext";
+import { smoothTransition, springTransition } from "../utils/animations";
 
 type MeditationControlsOverlayProps = {
   formattedTime: string;
@@ -39,11 +40,7 @@ export function MeditationControlsOverlay({ formattedTime }: MeditationControlsO
                 initial={{ opacity: 0, y: -20, x: "-50%" }}
                 animate={{ opacity: 1, y: 0, x: "-50%" }}
                 exit={{ opacity: 0, y: -20, x: "-50%" }}
-                transition={{
-                  duration: 0.4,
-                  ease: [0.4, 0, 0.2, 1],
-                  exit: { duration: 0 },
-                }}
+                transition={smoothTransition}
                 className="fixed left-1/2 -translate-x-1/2 z-10 bg-white/80 backdrop-blur-sm border border-input px-4 py-2 rounded-full shadow-lg"
               >
                 <span className="text-xl font-serif text-black">
@@ -56,20 +53,26 @@ export function MeditationControlsOverlay({ formattedTime }: MeditationControlsO
       </AnimatePresence>
 
       {/* Stop Button Component */}
-      <div
-        className="fixed bottom-4 left-1/2 -translate-x-1/2 z-10"
-        onMouseEnter={() => setIsStopButtonHovered(true)}
-        onMouseLeave={() => setIsStopButtonHovered(false)}
-      >
-        <Button
-          onClick={handleStop}
-          variant="outline"
-          size="icon"
-          className="h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white/90 shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out hover:scale-105 transform motion-safe:hover:scale-105 motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+      <AnimatePresence>
+        <motion.div
+                initial={{ opacity: 0, y: 20, x: "-50%" }}
+                animate={{ opacity: 1, y: 0, x: "-50%" }}
+                exit={{ opacity: 0, y: 20, x: "-50%" }}
+                transition={springTransition}
+            className="fixed bottom-4 left-1/2 -translate-x-1/2 z-10"
+            onMouseEnter={() => setIsStopButtonHovered(true)}
+            onMouseLeave={() => setIsStopButtonHovered(false)}
         >
-          <Square className="w-4 h-4" />
-        </Button>
-      </div>
+            <Button
+            onClick={handleStop}
+            variant="outline"
+            size="icon"
+            className="h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white/90 shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out hover:scale-105 transform motion-safe:hover:scale-105 motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+            >
+            <Square className="w-4 h-4" />
+            </Button>
+        </motion.div>
+      </AnimatePresence>
     </>
   );
 } 

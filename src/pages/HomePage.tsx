@@ -12,19 +12,7 @@ import { API_BASE_URL, MEDITATION_DURATIONS } from "@/config";
 import { useMeditation } from "@/contexts/MeditationContext";
 import { useUI } from "@/contexts/UIContext";
 import { MainLayout } from "@/components/layout/MainLayout";
-
-const childVariant = {
-  hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: {
-      type: "spring",
-      stiffness: 150,
-      damping: 30,
-    },
-  },
-};
+import { childVariant, staggerContainerVariant } from "@/utils/animations";
 
 export function HomePage() {
   const { 
@@ -54,15 +42,7 @@ export function HomePage() {
       <motion.div
         initial="hidden"
         animate="visible"
-        variants={{
-          hidden: { opacity: 1 },
-          visible: {
-            opacity: 1,
-            transition: {
-              staggerChildren: 0.1,
-            },
-          },
-        }}
+        variants={staggerContainerVariant}
         className="w-[1000px] max-w-[90vw] mx-auto px-4 space-y-8 py-12 flex flex-col justify-center flex-1"
       >
         <motion.h1
