@@ -91,48 +91,65 @@ export function EndPage() {
               variants={childVariant}
               className="grid grid-cols-2 gap-x-8 py-8 gap-y-6 max-w-2xl mx-auto text-sm border-t border-b"
             >
-              <div>
-                <p className="text-gray-500">Title</p>
-                <p className="">
-                  {todaysPic.description.name}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-500">Artist</p>
-                <p className="">
-                  {todaysPic.description.artist}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-500">Date</p>
-                <p className="">
-                  {todaysPic.description.date}
-                </p>
-              </div>
-              <div>
-                <p className="text-gray-500">Dimensions</p>
-                <p className="">
-                  {todaysPic.description.dimensions}
-                </p>
-              </div>
-              <motion.div variants={childVariant} className="col-span-2 max-w-2xl mx-auto">
-                <p className="text-gray-500 text-sm mb-2">About</p>
-                <p className="text-sm leading-relaxed">
-                  {todaysPic.description.about}
-                </p>
-              </motion.div>
-              <motion.div variants={childVariant} className="col-span-2">
-                <p className="text-gray-500">Repository</p>
-                <a
-                  href={todaysPic.description.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:underline flex items-center"
-                >
-                  {todaysPic.description.repository}{" "}
-                  <ArrowUpRight className="w-4 h-4 ml-1" />
-                </a>
-              </motion.div>
+              {todaysPic.description.name && (
+                <div>
+                  <p className="text-gray-500">Title</p>
+                  <p className="">
+                    {todaysPic.description.name}
+                  </p>
+                </div>
+              )}
+              {todaysPic.description.artist && (
+                <div>
+                  <p className="text-gray-500">Artist</p>
+                  <p className="">
+                    {todaysPic.description.artist}
+                  </p>
+                </div>
+              )}
+              {todaysPic.description.date && (
+                <div>
+                  <p className="text-gray-500">Date</p>
+                  <p className="">
+                    {todaysPic.description.date}
+                  </p>
+                </div>
+              )}
+              {todaysPic.description.dimensions && (
+                <div>
+                  <p className="text-gray-500">Dimensions</p>
+                  <p className="">
+                    {todaysPic.description.dimensions}
+                  </p>
+                </div>
+              )}
+              {todaysPic.description.about && (
+                <motion.div variants={childVariant} className="col-span-2 max-w-2xl mx-auto">
+                  <p className="text-gray-500 text-sm mb-2">About</p>
+                  <p className="text-sm leading-relaxed">
+                    {todaysPic.description.about}
+                  </p>
+                </motion.div>
+              )}
+              {todaysPic.description.repository && (
+                <motion.div variants={childVariant} className="col-span-2">
+                  <p className="text-gray-500">Repository</p>
+                  <Button
+                    variant="link"
+                    className="p-0 h-auto"
+                    asChild
+                  >
+                    <a 
+                      href={todaysPic.description.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {todaysPic.description.repository}{" "}
+                      <ArrowUpRight className="w-4 h-4 ml-1" />
+                    </a>
+                  </Button>
+                </motion.div>
+              )}
             </motion.div>
 
             <motion.div variants={childVariant} className="text-center">

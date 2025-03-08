@@ -7,11 +7,14 @@ interface UIContextType {
   isTimerHovered: boolean;
   isStopButtonHovered: boolean;
   isImageLoaded: boolean;
+  isAboutModalOpen: boolean;
   
   // Actions
   setIsTimerHovered: (hovered: boolean) => void;
   setIsStopButtonHovered: (hovered: boolean) => void;
   setIsImageLoaded: (loaded: boolean) => void;
+  openAboutModal: () => void;
+  closeAboutModal: () => void;
 }
 
 const UIContext = createContext<UIContextType | undefined>(undefined);
@@ -24,6 +27,7 @@ export function UIProvider({ children }: { children: ReactNode }) {
   const [isTimerHovered, setIsTimerHovered] = useState(false);
   const [isStopButtonHovered, setIsStopButtonHovered] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [isAboutModalOpen, setIsAboutModalOpen] = useState(false);
 
   // Timer visibility logic
   useEffect(() => {
@@ -37,14 +41,21 @@ export function UIProvider({ children }: { children: ReactNode }) {
     }
   }, [elapsedTime, duration, meditationState, isStopButtonHovered, isTimerHovered]);
 
+  // About modal actions
+  const openAboutModal = () => setIsAboutModalOpen(true);
+  const closeAboutModal = () => setIsAboutModalOpen(false);
+
   const value = {
     showTimer,
     isTimerHovered,
     isStopButtonHovered,
     isImageLoaded,
+    isAboutModalOpen,
     setIsTimerHovered,
     setIsStopButtonHovered,
     setIsImageLoaded,
+    openAboutModal,
+    closeAboutModal,
   };
 
   return <UIContext.Provider value={value}>{children}</UIContext.Provider>;

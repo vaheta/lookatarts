@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import { X, ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUI } from "@/contexts/UIContext";
 import { useEffect } from "react";
@@ -23,47 +23,74 @@ export function AboutModal() {
   }, [isAboutModalOpen]);
 
   return (
-    <AnimatePresence>
-      {isAboutModalOpen && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-white/80 backdrop-blur-lg"
-            onClick={closeAboutModal}
-          />
-          
-          {/* Modal */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="relative p-8 rounded-lg max-w-md w-full m-4 z-10 flex flex-col items-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="space-y-4 text-center">
-              <h2 className="text-2xl font-serif">About Us</h2>
-              <p className="text-sm text-gray-700">
-                This is a placeholder for the About Us content. We will work on the actual content later.
-              </p>
-            </div>
+    <>
+      <AnimatePresence>
+        {isAboutModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center z-30">
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="absolute inset-0 bg-white/90 backdrop-blur-2xl"
+              onClick={closeAboutModal}
+            />
             
-            <div className="mt-8">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={closeAboutModal}
-                className="rounded-full bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-300 text-xs h-8"
-              >
-                Close
-              </Button>
-            </div>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+            {/* Modal */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              transition={{ type: "spring", damping: 20, stiffness: 300 }}
+              className="relative p-8 rounded-lg max-w-md w-full m-4 z-10 flex flex-col items-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="space-y-8">
+                <h2 className="text-4xl font-serif text-center">LooksAtArts.com</h2>
+                <div className="text-sm text-gray-700 space-y-4">
+                  <p>
+                    We've created this space as an invitation to pause. To look deeply. Whether you have five minutes or fifty, we hope visual meditation with LookAtArts helps you carve out moments of presence in your day through the contemplative power of art.
+                  </p>
+                  <p>
+                    Our project was sparked by a <Button
+                      variant="link"
+                      className="p-0 h-auto"
+                      asChild
+                    >
+                      <a href="https://www.nytimes.com/interactive/2024/07/20/upshot/attention-experiment.html" target="_blank" rel="noopener noreferrer">
+                        New York Times story
+                      </a>
+                    </Button> about Harvard art history professor Jennifer Roberts, who encourages her students to spend three full hours with a single artwork in a museum. In our fast-paced world, slow, deliberate observation offers a powerful way to re-center and find calm.
+                  </p>
+                  <p>
+                    We hope you enjoy your visual meditation!
+                  </p>
+                  <p className="italic">
+                    ~Two friends with a shared passion for art and meditation
+                  </p>
+                  <br/> 
+                  <div className="pt-8 pb-4 border-t border-gray-100 mt-8">
+                    <p className="text-gray-500 text-center">
+                      P.S. Have a feature request or just want to chat? <br/> Say hi at{" "}
+                      <Button
+                        variant="link"
+                        className="p-0 h-auto"
+                        asChild
+                      >
+                        <a href="mailto:hello@lookatarts.com">
+                          hello@lookatarts.com{" "}
+                          <ArrowUpRight className="w-4 h-4 ml-1" />
+                        </a>
+                      </Button>
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </>
   );
 } 

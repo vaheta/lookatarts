@@ -3,6 +3,7 @@ import { AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useMeditation } from "@/contexts/MeditationContext";
 import { PanAnimation } from "@/components/PanAnimation";
+import { AboutModal } from "@/components/AboutModal";
 import { fetchTodaysPic } from "@/services/api";
 import { HomePage } from "@/pages/HomePage";
 import { MeditationPage } from "@/pages/MeditationPage";
@@ -35,6 +36,9 @@ function App() {
 
   return (
     <>
+      {/* About Modal */}
+      <AboutModal />
+      
       {/* Pan Animation Overlay */}
       <AnimatePresence mode="wait">
         {showPanAnimation && !hasInteracted && (

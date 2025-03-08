@@ -88,7 +88,7 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
     todaysPic,
     isLoading,
     elapsedTime,
-    formattedTime: formatTime(elapsedTime),
+    formattedTime: formatTime(elapsedTime, false, true),
     setDuration,
     startMeditation,
     stopMeditation,
