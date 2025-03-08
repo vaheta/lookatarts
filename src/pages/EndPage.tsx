@@ -26,7 +26,7 @@ const childVariant = {
 };
 
 export function EndPage() {
-  const { todaysPic, formattedTime, resetMeditation, elapsedTime, duration } = useMeditation();
+  const { todaysPic, resetMeditation, elapsedTime, duration, formatElapsedTime } = useMeditation();
 
   if (!todaysPic) return null;
   
@@ -76,7 +76,7 @@ export function EndPage() {
                   variants={childVariant}
                   className="text-4xl font-serif text-black text-center"
                 >
-                  You've meditated for {formattedTime}
+                  You've meditated for {formatElapsedTime()}
                 </motion.h1>
                 <motion.p
                   variants={childVariant}

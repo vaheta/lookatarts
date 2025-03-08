@@ -4,25 +4,19 @@ import { useMeditation } from "@/contexts/MeditationContext";
 import { useUI } from "@/contexts/UIContext";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { MainLayout } from "@/components/layout/MainLayout";
-import { Timer } from "@/components/Timer";
-import { StopButton } from "@/components/StopButton";
+import { MeditationControlsOverlay } from "@/components/MeditationControlsOverlay";
 
 export function MeditationPage() {
-  const { todaysPic, handleInteraction, formattedTime } = useMeditation();
-  const { isImageLoaded, setIsImageLoaded, showTimer, setIsTimerHovered, setIsStopButtonHovered } = useUI();
+  const { todaysPic, handleInteraction, formatElapsedAndTotalTime } = useMeditation();
+  const { isImageLoaded, setIsImageLoaded} = useUI();
   const isMobile = useIsMobile();
 
   if (!todaysPic) return null;
 
   return (
     <MainLayout hideHeaderFooter>
-      <Timer
-        showTimer={showTimer}
-        formattedTime={formattedTime}
-        onTimerHover={setIsTimerHovered}
-      />
-      <StopButton
-        onHover={setIsStopButtonHovered}
+      <MeditationControlsOverlay 
+        formattedTime={formatElapsedAndTotalTime()}
       />
       
       <div className="relative w-full">
@@ -38,7 +32,10 @@ export function MeditationPage() {
             wrapperClass="w-screen h-screen"
             contentClass="w-full h-full flex items-center justify-center p-8"
           >
-            <div className="relative bg-white rounded-lg shadow-[0_0_40px_rgba(0,0,0,0.1),0_0_12px_rgba(0,0,0,0.05)] border-[24px] border-white w-fit">
+            <div className="relative bg-white rounded-lg shadow-[0_0_40px_rgba(0,0,0,0.1),0_0_12px_rgba(0,0,0,0.05)] border-white w-fit" 
+              style={{
+                borderWidth: isMobile ? '1px' : '12px'
+              }}>
               <div className="absolute inset-0 shadow-inner"></div>
               <div
                 className="relative"

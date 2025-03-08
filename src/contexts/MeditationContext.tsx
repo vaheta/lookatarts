@@ -15,7 +15,9 @@ interface MeditationContextType {
   
   // Timer state
   elapsedTime: number;
-  formattedTime: string;
+  formatElapsedTime: () => string;           // Just elapsed time (MM:SS)
+  formatElapsedAndTotalTime: () => string;   // Elapsed with total (MM:SS / MM:SS)
+  formatElapsedTimeInWords: () => string;    // Elapsed time in words (X minutes Y seconds)
   
   // Actions
   setDuration: (duration: string) => void;
@@ -39,7 +41,13 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   // Timer integration
-  const { elapsedTime, resetTimer, formatTime } = useTimer(
+  const { 
+    elapsedTime, 
+    resetTimer, 
+    formatElapsedTime,
+    formatElapsedAndTotalTime,
+    formatElapsedTimeInWords,
+  } = useTimer(
     duration,
     meditationState,
     () => setMeditationState("completed")
@@ -88,7 +96,9 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
     todaysPic,
     isLoading,
     elapsedTime,
-    formattedTime: formatTime(elapsedTime, false, true),
+    formatElapsedTime,
+    formatElapsedAndTotalTime,
+    formatElapsedTimeInWords,
     setDuration,
     startMeditation,
     stopMeditation,

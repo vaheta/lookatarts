@@ -21,7 +21,7 @@ export function StopButton({ onHover }: StopButtonProps) {
 
   return (
     <div
-      className="fixed bottom-8 left-1/2 -translate-x-1/2 z-10"
+      className="fixed bottom-4 left-1/2 -translate-x-1/2 z-10"
       onMouseEnter={() => onHover(true)}
       onMouseLeave={() => onHover(false)}
     >

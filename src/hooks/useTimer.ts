@@ -27,6 +27,7 @@ export function useTimer(duration: string, meditationState: MeditationState, onC
     setElapsedTime(0);
   };
 
+  // Private base formatting function
   const formatTime = (seconds: number, humanReadable: boolean = false, showTotal: boolean = false) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
@@ -58,9 +59,24 @@ export function useTimer(duration: string, meditationState: MeditationState, onC
     return formattedElapsedTime;
   };
 
+  // Public, descriptive formatting functions
+  const formatElapsedTime = () => formatTime(elapsedTime);
+  const formatElapsedAndTotalTime = () => formatTime(elapsedTime, false, true);
+  const formatElapsedTimeInWords = () => formatTime(elapsedTime, true);
+
+  // Format any time value (not just elapsed time)
+  const formatAnyTime = (seconds: number) => formatTime(seconds);
+  const formatAnyTimeWithTotal = (seconds: number) => formatTime(seconds, false, true);
+  const formatAnyTimeInWords = (seconds: number) => formatTime(seconds, true);
+
   return {
     elapsedTime,
     resetTimer,
-    formatTime,
+    formatElapsedTime,
+    formatElapsedAndTotalTime,
+    formatElapsedTimeInWords,
+    formatAnyTime,
+    formatAnyTimeWithTotal, 
+    formatAnyTimeInWords
   };
 } 
