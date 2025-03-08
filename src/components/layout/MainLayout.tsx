@@ -1,22 +1,25 @@
-
-// Remove the unused imports
-// import useUI from '../contexts/UIContext';
-// import React from 'react';
-
-import { ReactNode } from 'react';
-import Header from './Header';
-import Footer from './Footer';
+import { ReactNode } from "react";
+import { Header } from "./Header";
+import { Footer } from "./Footer";
 
 interface MainLayoutProps {
   children: ReactNode;
+  hideHeaderFooter?: boolean;
 }
 
-export default function MainLayout({ children }: MainLayoutProps) {
+export function MainLayout({ children, hideHeaderFooter = false }: MainLayoutProps) {
   return (
-    <div className="flex min-h-screen flex-col">
-      <Header />
-      <main className="flex-1">{children}</main>
-      <Footer />
+    <div className="min-h-screen flex flex-col bg-white text-black">
+      {/* Render header if not hidden */}
+      {!hideHeaderFooter && <Header />}
+
+      {/* Main Content area */}
+      <main className="flex-1 flex flex-col items-stretch">
+        {children}
+      </main>
+
+      {/* Render footer if not hidden */}
+      {!hideHeaderFooter && <Footer />}
     </div>
   );
-}
+} 

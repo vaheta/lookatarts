@@ -1,5 +1,3 @@
-
-
 interface HeaderProps {
   className?: string;
 }
