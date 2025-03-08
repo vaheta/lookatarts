@@ -1,7 +1,7 @@
-import React, { ReactNode } from "react";
+import { useUI } from "@/contexts/UIContext";
 import { Header } from "./Header";
+import React, { ReactNode } from "react";
 import { Footer } from "./Footer";
-import { useMeditation } from "@/contexts/MeditationContext";
 
 interface MainLayoutProps {
   children: ReactNode;
@@ -23,4 +23,4 @@ export function MainLayout({ children, hideHeaderFooter = false }: MainLayoutPro
       {!hideHeaderFooter && <Footer />}
     </div>
   );
-} 
+}

@@ -1,5 +1,4 @@
-import React from "react";
-import { Info, X } from "lucide-react";
+import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUI } from "@/contexts/UIContext";
 
@@ -9,7 +8,7 @@ interface FooterProps {
 
 export function Footer({ className = "" }: FooterProps) {
   const { isAboutModalOpen, openAboutModal, closeAboutModal } = useUI();
-  
+
   const handleToggleModal = () => {
     if (isAboutModalOpen) {
       closeAboutModal();
@@ -31,7 +30,6 @@ export function Footer({ className = "" }: FooterProps) {
             <X className="w-4 h-4" />
           ) : (
             <div className="flex items-center gap-1.5">
-              {/* <Info className="w-4 h-4" /> */}
               <span>About project</span>
             </div>
           )}
@@ -39,4 +37,4 @@ export function Footer({ className = "" }: FooterProps) {
       </div>
     </footer>
   );
-} 
+}

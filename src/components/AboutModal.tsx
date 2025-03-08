@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUI } from "@/contexts/UIContext";
 import { useEffect } from "react";
@@ -14,7 +14,7 @@ export function AboutModal() {
       const originalStyle = window.getComputedStyle(document.body).overflow;
       // Prevent scrolling on the body
       document.body.style.overflow = 'hidden';
-      
+
       // Restore original overflow style when modal closes
       return () => {
         document.body.style.overflow = originalStyle;
@@ -35,7 +35,7 @@ export function AboutModal() {
               className="absolute inset-0 bg-white/90 backdrop-blur-2xl"
               onClick={closeAboutModal}
             />
-            
+
             {/* Modal */}
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
@@ -86,11 +86,11 @@ export function AboutModal() {
                   </div>
                 </div>
               </div>
-              
+
             </motion.div>
           </div>
         )}
       </AnimatePresence>
     </>
   );
-} 
+}
