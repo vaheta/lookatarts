@@ -2,19 +2,17 @@ import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { useMeditation } from "@/contexts/MeditationContext";
-import { PanAnimation } from "@/components/PanAnimation";
 import { AboutModal } from "@/components/AboutModal";
 import { fetchTodaysPic } from "@/services/api";
 import { HomePage } from "@/pages/HomePage";
 import { MeditationPage } from "@/pages/MeditationPage";
 import { EndPage } from "@/pages/EndPage";
+import { ViewportProvider } from "@/providers/ViewportProvider";
 
 function App() {
   const isMobile = useIsMobile();
   const {
     meditationState,
-    hasInteracted,
-    showPanAnimation,
     setTodaysPic,
     setIsLoading,
   } = useMeditation();
@@ -35,17 +33,10 @@ function App() {
   }, [setIsLoading, setTodaysPic]);
 
   return (
-    <>
+    <ViewportProvider>
       {/* About Modal */}
       <AboutModal />
       
-      {/* Pan Animation Overlay */}
-      <AnimatePresence mode="wait">
-        {showPanAnimation && !hasInteracted && (
-          <PanAnimation show={true} isMobile={isMobile} />
-        )}
-      </AnimatePresence>
-
       {/* Main Page Content based on meditation state */}
       <AnimatePresence mode="wait">
         {meditationState === "completed" ? (
@@ -56,7 +47,7 @@ function App() {
           <HomePage />
         )}
       </AnimatePresence>
-    </>
+    </ViewportProvider>
   );
 }
 

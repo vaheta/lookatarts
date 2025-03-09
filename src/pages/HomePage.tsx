@@ -43,11 +43,11 @@ export function HomePage() {
         initial="hidden"
         animate="visible"
         variants={staggerContainerVariant}
-        className="w-[1000px] max-w-[90vw] mx-auto px-4 space-y-8 py-12 flex flex-col justify-center flex-1"
+        className="w-full max-w-[1000px] mx-auto px-4 space-y-4 md:space-y-8 py-6 md:py-12 flex flex-col justify-center flex-1"
       >
         <motion.h1
           variants={childVariant}
-          className="text-4xl font-serif text-black text-center"
+          className="text-3xl md:text-4xl font-serif text-black text-center"
         >
           Daily Visual Meditation
         </motion.h1>
@@ -60,6 +60,8 @@ export function HomePage() {
             className="relative"
             style={{
               aspectRatio: `${todaysPic.description.width} / ${todaysPic.description.height}`,
+              willChange: 'contents',
+              transform: 'translateZ(0)'
             }}
           >
             {!isImageLoaded && (

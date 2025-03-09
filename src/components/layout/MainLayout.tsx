@@ -9,7 +9,7 @@ interface MainLayoutProps {
 
 export function MainLayout({ children, hideHeaderFooter = false }: MainLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col bg-white text-black">
+    <div className="real-h-screen flex flex-col bg-white text-black">
       {/* Render header if not hidden */}
       {!hideHeaderFooter && <Header />}
 

@@ -21,17 +21,18 @@ export function PanAnimation({ show, isMobile }: PanAnimationProps) {
     >
       <motion.div 
         variants={childVariant}
-        className="w-32 h-32"
+        className="w-20 h-20 relative"
       >
         <Lottie 
           animationData={panAnimation} 
           loop={true}
           style={{ filter: 'brightness(0) invert(1)' }} 
+          className="w-[200%] h-[200%] -translate-x-1/4 -translate-y-1/4"
         />
       </motion.div>
       <motion.p
         variants={childVariant}
-        className="-mt-6 text-lg font-base text-white mix-blend-difference"
+        className="text-lg font-base text-white mix-blend-difference"
       >
         {isMobile ? "Pinch and pan to explore details." : "Zoom and pan with your mouse to explore details."}
       </motion.p>

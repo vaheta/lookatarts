@@ -29,6 +29,8 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    /* Default value for --vh, will be updated by JS */
+    --vh: 1vh;
   }
 
   .dark {
@@ -65,5 +67,25 @@
   }
   body {
     @apply bg-background text-foreground;
+  }
+  
+  /* Add smooth transitions to the entire app */
+  html, body, #root, #root > div {
+    transition: height 0.1s ease-out;
+  }
+}
+
+@layer utilities {
+  /* Real viewport height utility class */
+  .real-h-screen {
+    height: 100vh; /* Fallback */
+    height: calc(var(--vh, 1vh) * 100);
+    transition: height 0.1s ease-out;
+  }
+
+  /* Fixed content height utility that accounts for header/footer */
+  .content-h-screen {
+    height: calc((var(--vh, 1vh) * 100) - var(--header-height, 0px) - var(--footer-height, 0px));
+    transition: height 0.1s ease-out;
   }
 }
