@@ -96,7 +96,7 @@ export function HomePage() {
                     >
                       <SelectTrigger 
                         variant="minimal" 
-                        className="group text-white text-md md:text-xl lg:text-2xl font-serif w-fit justify-center min-w-[140px]"
+                        className="group text-white text-lg md:text-xl lg:text-2xl font-serif w-fit justify-center min-w-[140px]"
                         style={{ textShadow: "0px 2px 12px rgba(0,0,0,1), 0px 2px 24px rgba(0,0,0,1)" }}
                       >
                         Meditate for <span 

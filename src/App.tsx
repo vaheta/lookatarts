@@ -30,6 +30,39 @@ function App() {
     loadTodaysPic();
   }, [setIsLoading, setTodaysPic]);
 
+  // Reset scroll position when meditation state changes
+  useEffect(() => {
+    // Reset scroll position on page change
+    window.scrollTo(0, 0);
+    
+    // Check if we're on mobile
+    const isMobile = window.matchMedia('(max-width: 768px)').matches;
+    
+    if (isMobile) {
+      // For mobile browsers, we need additional handling
+      // Set timeout to ensure scroll reset happens after rendering
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        
+        // Update viewport height calculation
+        const vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
+      }, 50);
+      
+      // For Chrome mobile specifically, a second reset helps
+      setTimeout(() => window.scrollTo(0, 0), 300);
+    }
+
+    // Reset any lingering body styles that might affect scrolling
+    if (meditationState !== "meditating") {
+      document.body.style.overflow = "";
+      document.body.style.touchAction = "";
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.width = "";
+    }
+  }, [meditationState]);
+
   return (
     <ViewportProvider>
       {/* About Modal */}

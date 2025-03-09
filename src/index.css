@@ -78,18 +78,36 @@
 @layer utilities {
   /* Real viewport height utility class */
   .real-h-screen {
-    height: 100vh; /* Fallback */
-    height: calc(var(--vh, 1vh) * 100);
-    min-height: min(100%, 100vh); /* Additional fallback */
-    transition: height 0.1s ease-out;
-    max-height: 100vh; /* Prevent overflow */
+    /* Multiple fallbacks for consistent height calculation */
+    height: 100vh !important; /* Basic fallback */
+    height: calc(var(--vh, 1vh) * 100) !important; /* CSS variable-based calculation */
+    min-height: min(100%, 100vh) !important; /* Additional fallback for older browsers */
+    
+    /* Force hardware acceleration to prevent flickering during transitions */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    perspective: 1000;
+    
+    /* Improve transition smoothness */
+    transition: height 0.15s ease-out !important;
+    
+    /* Prevent content overflow */
+    max-height: 100vh !important;
+    max-height: calc(var(--vh, 1vh) * 100) !important;
+    
+    /* Ensure content doesn't get cut off on iOS */
+    -webkit-overflow-scrolling: touch;
   }
 
   /* Fixed content height utility that accounts for header/footer */
   .content-h-screen {
     height: calc((var(--vh, 1vh) * 100) - var(--header-height, 0px) - var(--footer-height, 0px));
     min-height: calc(100vh - var(--header-height, 0px) - var(--footer-height, 0px)); /* Fallback */
-    transition: height 0.1s ease-out;
+    transition: height 0.15s ease-out;
     max-height: calc(100vh - var(--header-height, 0px) - var(--footer-height, 0px)); /* Prevent overflow */
+    
+    /* Force hardware acceleration for smoother transitions */
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 }

@@ -67,9 +67,21 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
 
   // Action handlers
   const startMeditation = useCallback(() => {
-    resetTimer();
-    setMeditationState("meditating");
-    setHasInteracted(false);
+    // Reset scroll position first to ensure clean state
+    window.scrollTo(0, 0);
+    
+    // Reset body overflow - important for mobile
+    document.body.style.overflow = "hidden";
+    
+    // Small delay to ensure scroll reset happens before any animations
+    setTimeout(() => {
+      resetTimer();
+      setMeditationState("meditating");
+      setHasInteracted(false);
+      
+      // Reset scroll position again after state change
+      window.scrollTo(0, 0);
+    }, 10);
   }, [resetTimer]);
 
   const stopMeditation = useCallback((resetUIStates?: () => void) => {
