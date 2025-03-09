@@ -5,6 +5,7 @@ import { API_BASE_URL } from "@/config";
 import { useMeditation } from "@/contexts/MeditationContext";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { childVariant, staggerContainerVariant } from "@/utils/animations";
+import { ThreeDDivider } from "@/components/3DDivider";
 
 export function EndPage() {
   const { todaysPic, resetMeditation, elapsedTime, duration, formatElapsedTime } = useMeditation();
@@ -58,73 +59,76 @@ export function EndPage() {
 
             <motion.div
               variants={childVariant}
-              className="grid grid-cols-2 gap-x-8 py-8 gap-y-6 max-w-2xl mx-auto text-sm border-t border-b"
+              className=""
             >
-              {todaysPic.description.name && (
-                <div>
-                  <p className="text-gray-500">Title</p>
-                  <p className="">
-                    {todaysPic.description.name}
-                  </p>
-                </div>
-              )}
-              {todaysPic.description.artist && (
-                <div>
-                  <p className="text-gray-500">Artist</p>
-                  <p className="">
-                    {todaysPic.description.artist}
-                  </p>
-                </div>
-              )}
-              {todaysPic.description.date && (
-                <div>
-                  <p className="text-gray-500">Date</p>
-                  <p className="">
-                    {todaysPic.description.date}
-                  </p>
-                </div>
-              )}
-              {todaysPic.description.dimensions && (
-                <div>
-                  <p className="text-gray-500">Dimensions</p>
-                  <p className="">
-                    {todaysPic.description.dimensions}
-                  </p>
-                </div>
-              )}
-              {todaysPic.description.about && (
-                <motion.div variants={childVariant} className="col-span-2 max-w-2xl mx-auto">
-                  <p className="text-gray-500 text-sm mb-2">About</p>
-                  <p className="text-sm leading-relaxed">
-                    {todaysPic.description.about}
-                  </p>
-                </motion.div>
-              )}
-              {todaysPic.description.repository && (
-                <motion.div variants={childVariant} className="col-span-2">
-                  <p className="text-gray-500">Repository</p>
-                  <Button
-                    variant="link"
-                    className="p-0 h-auto"
-                    asChild
-                  >
-                    <a 
-                      href={todaysPic.description.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
+              <ThreeDDivider />
+              <div className="grid grid-cols-2 gap-x-8 py-4 px-4 gap-y-6 max-w-2xl mx-auto text-sm">
+                {todaysPic.description.name && (
+                  <div>
+                    <p className="text-gray-500">Title</p>
+                    <p className="">
+                      {todaysPic.description.name}
+                    </p>
+                  </div>
+                )}
+                {todaysPic.description.artist && (
+                  <div>
+                    <p className="text-gray-500">Artist</p>
+                    <p className="">
+                      {todaysPic.description.artist}
+                    </p>
+                  </div>
+                )}
+                {todaysPic.description.date && (
+                  <div>
+                    <p className="text-gray-500">Date</p>
+                    <p className="">
+                      {todaysPic.description.date}
+                    </p>
+                  </div>
+                )}
+                {todaysPic.description.dimensions && (
+                  <div>
+                    <p className="text-gray-500">Dimensions</p>
+                    <p className="">
+                      {todaysPic.description.dimensions}
+                    </p>
+                  </div>
+                )}
+                {todaysPic.description.about && (
+                  <motion.div variants={childVariant} className="col-span-2 max-w-2xl mx-auto">
+                    <p className="text-gray-500 text-sm mb-2">About</p>
+                    <p className="text-sm leading-relaxed">
+                      {todaysPic.description.about}
+                    </p>
+                  </motion.div>
+                )}
+                {todaysPic.description.repository && (
+                  <motion.div variants={childVariant} className="col-span-2">
+                    <p className="text-gray-500">Repository</p>
+                    <Button
+                      variant="link"
+                      className="p-0 h-auto"
+                      asChild
                     >
-                      {todaysPic.description.repository}{" "}
-                      <ArrowUpRight className="w-4 h-4 ml-1" />
-                    </a>
-                  </Button>
-                </motion.div>
-              )}
+                      <a 
+                        href={todaysPic.description.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {todaysPic.description.repository}{" "}
+                        <ArrowUpRight className="w-4 h-4 ml-1" />
+                      </a>
+                    </Button>
+                  </motion.div>
+                )}
+              </div>
+              <ThreeDDivider />
             </motion.div>
 
             <motion.div variants={childVariant} className="text-center">
               <Button
                 onClick={resetMeditation}
-                className="bg-black text-white hover:bg-gray-800"
               >
                 Return Home
               </Button>

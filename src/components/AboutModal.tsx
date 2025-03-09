@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useUI } from "@/contexts/UIContext";
 import { useEffect } from "react";
 import { springTransition, childVariant, staggerContainerVariant } from "../utils/animations";
+import { ThreeDDivider } from "@/components/3DDivider";
 
 export function AboutModal() {
   const { isAboutModalOpen, closeAboutModal } = useUI();
@@ -33,7 +34,7 @@ export function AboutModal() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="absolute inset-0 bg-white/90 backdrop-blur-2xl"
+              className="absolute inset-0 bg-stone-200/90 backdrop-blur-2xl"
               onClick={closeAboutModal}
             />
             
@@ -86,9 +87,9 @@ export function AboutModal() {
                 </motion.div>
                 <br/> 
                 <motion.div 
-                  className="pt-8 pb-4 border-t border-gray-100 mt-8"
                   variants={childVariant}
                 >
+                  <ThreeDDivider className="my-8" />
                   <p className="text-gray-500 text-center">
                     P.S. Have a feature request or just want to chat? <br/> Say hi at{" "}
                     <Button
