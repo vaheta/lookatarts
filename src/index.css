@@ -80,12 +80,16 @@
   .real-h-screen {
     height: 100vh; /* Fallback */
     height: calc(var(--vh, 1vh) * 100);
+    min-height: min(100%, 100vh); /* Additional fallback */
     transition: height 0.1s ease-out;
+    max-height: 100vh; /* Prevent overflow */
   }
 
   /* Fixed content height utility that accounts for header/footer */
   .content-h-screen {
     height: calc((var(--vh, 1vh) * 100) - var(--header-height, 0px) - var(--footer-height, 0px));
+    min-height: calc(100vh - var(--header-height, 0px) - var(--footer-height, 0px)); /* Fallback */
     transition: height 0.1s ease-out;
+    max-height: calc(100vh - var(--header-height, 0px) - var(--footer-height, 0px)); /* Prevent overflow */
   }
 }

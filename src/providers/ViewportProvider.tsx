@@ -41,15 +41,17 @@ export function ViewportProvider({ children }: ViewportProviderProps) {
       setViewportHeight();
     }, 10);
 
-    // Update the height on resize and orientation change
+    // Update the height on resize, orientation change, and load
     window.addEventListener('resize', setViewportHeight);
     window.addEventListener('orientationchange', setViewportHeight);
+    window.addEventListener('load', setViewportHeight); // Added load event listener
 
     // Clean up
     return () => {
       clearTimeout(initialTimer);
       window.removeEventListener('resize', setViewportHeight);
       window.removeEventListener('orientationchange', setViewportHeight);
+      window.removeEventListener('load', setViewportHeight); // Added cleanup for load event listener
     };
   }, []);
 
