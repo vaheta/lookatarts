@@ -33,6 +33,7 @@ export function PanAnimation({ show, isMobile }: PanAnimationProps) {
       <motion.p
         variants={childVariant}
         className="text-lg font-base text-white mix-blend-difference"
+        style={{ textShadow: "0px 2px 12px rgba(0,0,0,1), 0px 2px 24px rgba(0,0,0,1)" }}
       >
         {isMobile ? "Pinch and pan to explore details." : "Zoom and pan with your mouse to explore details."}
       </motion.p>

@@ -1,6 +1,21 @@
 import { useState, useEffect } from "react";
 import { MeditationState } from "@/types";
 
+// Format duration for display in the trigger (short format)
+export const formatShortDuration = (durationInSeconds: string | undefined): string => {
+  if (!durationInSeconds) return "";
+  
+  // Convert string seconds to number and calculate minutes
+  const seconds = parseInt(durationInSeconds, 10);
+  if (isNaN(seconds)) return "";
+  
+  // Convert seconds to minutes (rounding down to nearest minute)
+  const minutes = Math.floor(seconds / 60);
+  
+  // Return minutes with "min" suffix
+  return `${minutes} mins`;
+};
+
 export function useTimer(duration: string, meditationState: MeditationState, onComplete: () => void) {
   const [elapsedTime, setElapsedTime] = useState(0);
 

@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import { useIsMobile } from "@/hooks/useIsMobile";
 import { useMeditation } from "@/contexts/MeditationContext";
 import { AboutModal } from "@/components/AboutModal";
 import { fetchTodaysPic } from "@/services/api";
@@ -10,7 +9,6 @@ import { EndPage } from "@/pages/EndPage";
 import { ViewportProvider } from "@/providers/ViewportProvider";
 
 function App() {
-  const isMobile = useIsMobile();
   const {
     meditationState,
     setTodaysPic,

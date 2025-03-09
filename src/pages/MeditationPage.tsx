@@ -7,7 +7,7 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { MeditationControlsOverlay } from "@/components/MeditationControlsOverlay";
 import { PanAnimation } from "@/components/PanAnimation";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 
 export function MeditationPage() {
   const { todaysPic, handleInteraction, formatElapsedAndTotalTime, hasInteracted, showPanAnimation, meditationState } =
@@ -17,11 +17,19 @@ export function MeditationPage() {
   const [isMobileDetectionComplete, setIsMobileDetectionComplete] = useState(false);
   const [centerViewFn, setCenterViewFn] = useState<((scale?: number | undefined, animationTime?: number | undefined) => void) | null>(null);
   const [imageHasLoaded, setImageHasLoaded] = useState(false);
+  const [showEducationalTip, setShowEducationalTip] = useState(false);
 
   // Set a flag once mobile detection is complete
   useEffect(() => {
     setIsMobileDetectionComplete(true);
   }, [isMobile]);
+
+  // Reset showEducationalTip when meditation state changes
+  useEffect(() => {
+    if (meditationState !== "meditating") {
+      setShowEducationalTip(false);
+    }
+  }, [meditationState]);
 
   // Set overflow: hidden on body only when in meditation mode
   useEffect(() => {
@@ -73,7 +81,7 @@ export function MeditationPage() {
 
       {/* Pan Animation Overlay */}
       <AnimatePresence mode="wait">
-        {showPanAnimation && !hasInteracted && (
+        {showPanAnimation && !hasInteracted && showEducationalTip && (
           <PanAnimation show={true} isMobile={isMobile} />
         )}
       </AnimatePresence>
@@ -88,7 +96,7 @@ export function MeditationPage() {
           onZoomStart={handleInteraction}
           centerOnInit={true}
         >
-          {({ centerView, setTransform }) => {
+          {({ centerView }) => {
             // Store centerView function for use in resize handler
             if (!centerViewFn) {
               setCenterViewFn(() => centerView);
@@ -135,6 +143,16 @@ export function MeditationPage() {
                           if (isMobile) {
                             // Animate zoom in on mobile - smooth transition from 0.5 to 2
                             centerView(2, 800);
+                            
+                            // Show the educational tip in the middle of the zoom animation
+                            setTimeout(() => {
+                              setShowEducationalTip(true);
+                            }, 300); // Appears when zoom is halfway through
+                          } else {
+                            // For desktop, show the educational tip after a short delay
+                            setTimeout(() => {
+                              setShowEducationalTip(true);
+                            }, 500);
                           }
                         }, 100);
                       }}
