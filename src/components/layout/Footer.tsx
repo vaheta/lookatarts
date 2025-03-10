@@ -2,6 +2,7 @@ import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUI } from "@/contexts/UIContext";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { AudioToggle } from "@/components/AudioToggle";
 
 interface FooterProps {
   className?: string;
@@ -34,10 +35,12 @@ export function Footer({ className = "" }: FooterProps) {
           ) : (
             <div className="flex items-center gap-1.5">
               {/* <Info className="w-4 h-4" /> */}
-              <span>About project</span>
+              <span>About</span>
             </div>
           )}
         </Button>
+        
+        <AudioToggle />
       </div>
     </footer>
   );

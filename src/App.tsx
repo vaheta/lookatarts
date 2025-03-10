@@ -8,6 +8,19 @@ import { MeditationPage } from "@/pages/MeditationPage";
 import { EndPage } from "@/pages/EndPage";
 import { ViewportProvider } from "@/providers/ViewportProvider";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { AudioProvider } from "@/contexts/AudioContext";
+
+/**
+ * Note on audio implementation:
+ * 
+ * For the audio feature to work properly, you need to add the following MP3 files:
+ * - /public/audio/nature-meditation.mp3
+ * - /public/audio/ambient-meditation.mp3
+ * - /public/audio/bells-meditation.mp3
+ * 
+ * You can use any royalty-free meditation audio files.
+ * Optimally, they should be 2-5 minute tracks that loop seamlessly.
+ */
 
 function App() {
   const {
@@ -66,21 +79,23 @@ function App() {
 
   return (
     <ThemeProvider>
-      <ViewportProvider>
-        {/* About Modal */}
-        <AboutModal />
-        
-        {/* Main Page Content based on meditation state */}
-        <AnimatePresence mode="wait">
-          {meditationState === "completed" ? (
-            <EndPage />
-          ) : meditationState === "meditating" ? (
-            <MeditationPage />
-          ) : (
-            <HomePage />
-          )}
-        </AnimatePresence>
-      </ViewportProvider>
+      <AudioProvider>
+        <ViewportProvider>
+          {/* About Modal */}
+          <AboutModal />
+          
+          {/* Main Page Content based on meditation state */}
+          <AnimatePresence mode="wait">
+            {meditationState === "completed" ? (
+              <EndPage />
+            ) : meditationState === "meditating" ? (
+              <MeditationPage />
+            ) : (
+              <HomePage />
+            )}
+          </AnimatePresence>
+        </ViewportProvider>
+      </AudioProvider>
     </ThemeProvider>
   );
 }
