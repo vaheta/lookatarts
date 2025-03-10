@@ -11,6 +11,7 @@ interface AudioContextType {
   setTrack: (track: AudioTrack) => void;
   showDropdown: boolean;
   setShowDropdown: (show: boolean) => void;
+  isLoading: boolean;
 }
 
 // Create the context
@@ -28,11 +29,8 @@ const audioTracks = {
 export function AudioProvider({ children }: { children: ReactNode }) {
   // State for audio playback
   const [isPlaying, setIsPlaying] = useState(false);
-  const [currentTrack, setCurrentTrack] = useState<AudioTrack>(() => {
-    // Check if there's a saved preference in localStorage
-    const savedTrack = localStorage.getItem("meditationTrack") as AudioTrack | null;
-    return savedTrack || "ambient";
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const [currentTrack, setCurrentTrack] = useState<AudioTrack>("none");
   const [showDropdown, setShowDropdown] = useState(false);
   const [audioElement, setAudioElement] = useState<HTMLAudioElement | null>(null);
 
@@ -41,10 +39,22 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     const audio = new Audio();
     audio.loop = true;
     audio.volume = 0.6; // Set default volume to 60%
+    
+    // Add event listeners for loading states
+    audio.addEventListener('loadstart', () => setIsLoading(true));
+    audio.addEventListener('canplay', () => setIsLoading(false));
+    audio.addEventListener('error', () => {
+      console.error("Error loading audio");
+      setIsLoading(false);
+    });
+    
     setAudioElement(audio);
 
     // Cleanup on unmount
     return () => {
+      audio.removeEventListener('loadstart', () => setIsLoading(true));
+      audio.removeEventListener('canplay', () => setIsLoading(false));
+      audio.removeEventListener('error', () => setIsLoading(false));
       audio.pause();
       audio.src = "";
     };
@@ -57,6 +67,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     // Update the audio source when track changes
     const trackPath = audioTracks[currentTrack];
     if (trackPath) {
+      setIsLoading(true);
       audioElement.src = trackPath;
       
       // If was playing before track change, continue playing new track
@@ -64,6 +75,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         audioElement.play().catch(err => {
           console.error("Error playing audio:", err);
           setIsPlaying(false);
+          setIsLoading(false);
         });
       }
     }
@@ -77,9 +89,11 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     if (!audioElement) return;
     
     if (isPlaying && currentTrack !== "none") {
+      setIsLoading(true);
       audioElement.play().catch(err => {
         console.error("Error playing audio:", err);
         setIsPlaying(false);
+        setIsLoading(false);
       });
     } else {
       audioElement.pause();
@@ -88,12 +102,14 @@ export function AudioProvider({ children }: { children: ReactNode }) {
 
   // Toggle audio playback
   const toggleAudio = () => {
-    if (currentTrack === "none" || !isPlaying) {
-      // If turning on, show dropdown
+    if (currentTrack === "none") {
+      // If no track selected, just show dropdown without changing playback state
       setShowDropdown(true);
+    } else if (!isPlaying) {
+      // If turning on, play current track
       setIsPlaying(true);
     } else {
-      // If turning off, hide dropdown and pause
+      // If turning off, pause
       setIsPlaying(false);
     }
   };
@@ -103,6 +119,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     setCurrentTrack(track);
     if (track === "none") {
       setIsPlaying(false);
+      setIsLoading(false);
     } else if (!isPlaying) {
       setIsPlaying(true);
     }
@@ -116,7 +133,8 @@ export function AudioProvider({ children }: { children: ReactNode }) {
         toggleAudio, 
         setTrack,
         showDropdown,
-        setShowDropdown
+        setShowDropdown,
+        isLoading
       }}
     >
       {children}

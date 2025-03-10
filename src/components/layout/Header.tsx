@@ -1,5 +1,3 @@
-import { ThemeToggle } from "@/components/ThemeToggle";
-
 interface HeaderProps {
   className?: string;
 }

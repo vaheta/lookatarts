@@ -1,10 +1,10 @@
-import { Square, Sun, Moon } from "lucide-react";
+import { Sun, Moon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/contexts/ThemeContext";
 import { motion } from "framer-motion";
 
 export function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+  const { theme, toggleTheme, usingSystemTheme } = useTheme();
   
   return (
     <Button
@@ -12,7 +12,8 @@ export function ThemeToggle() {
       variant="outline"
       size="icon"
       className="h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 shadow-none hover:shadow-xl transition-all duration-300 ease-in-out transform motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.34,1.56,0.64,1)]"
-      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+      aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode. ${usingSystemTheme ? 'Currently using system theme' : ''}`}
+      title={usingSystemTheme ? "Using system theme" : `Using ${theme} theme`}
     >
       <motion.div
         initial={{ opacity: 0, rotate: -30 }}

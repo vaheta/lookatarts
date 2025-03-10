@@ -1,11 +1,11 @@
 import React, { useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Volume2, VolumeX, Music, Volume1, Cloud, Waves, Radio } from "lucide-react";
+import { Volume2, VolumeX, Music, Cloud, Waves, Radio, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAudio, AudioTrack } from "@/contexts/AudioContext";
+import { useAudio } from "@/contexts/AudioContext";
 
 export function AudioToggle() {
-  const { isPlaying, currentTrack, toggleAudio, setTrack, showDropdown, setShowDropdown } = useAudio();
+  const { isPlaying, currentTrack, setTrack, showDropdown, setShowDropdown, isLoading } = useAudio();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
@@ -24,23 +24,15 @@ export function AudioToggle() {
 
   // Get the appropriate icon based on state
   const getIcon = () => {
-    if (showDropdown) {
-      // When menu is open, show X icon for close
-      return <VolumeX className="w-4 h-4" />;
-    } else if (!isPlaying || currentTrack === "none") {
+    if (isLoading) {
+      return <Loader2 className="w-4 h-4 animate-spin" />;
+    }
+    
+    if (!isPlaying || currentTrack === "none") {
       return <VolumeX className="w-4 h-4" />;
     } else {
       return <Volume2 className="w-4 h-4" />;
     }
-  };
-
-  // Track names for display
-  const trackNames = {
-    ambient: "Ambient Morning",
-    rain: "Summer Rain",
-    tone: "3 Hz Tone",
-    water: "Old Water",
-    none: "No Sound"
   };
 
   return (
@@ -65,6 +57,7 @@ export function AudioToggle() {
                   setShowDropdown(false);
                 }} 
                 icon={<Music className="w-4 h-4 mr-2" />}
+                isLoading={isLoading && currentTrack === "ambient"}
               />
               
               <TrackOption 
@@ -76,6 +69,7 @@ export function AudioToggle() {
                   setShowDropdown(false);
                 }} 
                 icon={<Cloud className="w-4 h-4 mr-2" />}
+                isLoading={isLoading && currentTrack === "rain"}
               />
               
               <TrackOption 
@@ -87,6 +81,7 @@ export function AudioToggle() {
                   setShowDropdown(false);
                 }} 
                 icon={<Radio className="w-4 h-4 mr-2" />}
+                isLoading={isLoading && currentTrack === "tone"}
               />
               
               <TrackOption 
@@ -98,6 +93,7 @@ export function AudioToggle() {
                   setShowDropdown(false);
                 }} 
                 icon={<Waves className="w-4 h-4 mr-2" />}
+                isLoading={isLoading && currentTrack === "water"}
               />
               
               <div className="my-1 border-t border-border/40"></div>
@@ -111,6 +107,7 @@ export function AudioToggle() {
                   setShowDropdown(false);
                 }} 
                 icon={<VolumeX className="w-4 h-4 mr-2" />}
+                isLoading={false}
               />
             </div>
           </motion.div>
@@ -120,21 +117,24 @@ export function AudioToggle() {
       {/* Audio Toggle Button */}
       <Button
         onClick={() => {
+          if (isLoading) {
+            // Do nothing if audio is currently loading
+            return;
+          }
+          
           if (showDropdown) {
             // If menu is open, close it without changing sound
             setShowDropdown(false);
-          } else if (isPlaying && !showDropdown) {
-            // If sound is playing and menu is closed, open the menu
+          } else if (!showDropdown) {
+            // If menu is closed, simply open it without changing audio state
             setShowDropdown(true);
-          } else {
-            // Otherwise toggle audio as before
-            toggleAudio();
           }
         }}
         variant="outline"
         size="icon"
-        className="h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 shadow-none hover:shadow-xl transition-all duration-300 ease-in-out transform motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.34,1.56,0.64,1)]"
-        aria-label={showDropdown ? "Close sound menu" : (isPlaying ? "Sound options" : "Turn sound on")}
+        disabled={isLoading}
+        className={`h-9 w-9 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background/90 shadow-none hover:shadow-xl transition-all duration-300 ease-in-out transform motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.34,1.56,0.64,1)] ${isLoading ? 'cursor-wait' : ''}`}
+        aria-label={isLoading ? "Loading audio" : (showDropdown ? "Close sound menu" : "Open sound menu")}
       >
         <motion.div
           initial={{ opacity: 0, rotate: -30 }}
@@ -156,37 +156,47 @@ function TrackOption({
   description,
   isActive, 
   onClick, 
-  icon 
+  icon,
+  isLoading
 }: { 
   label: string;
   description?: string;
   isActive: boolean; 
   onClick: () => void; 
-  icon: React.ReactNode 
+  icon: React.ReactNode;
+  isLoading: boolean;
 }) {
   return (
     <button
       onClick={onClick}
+      disabled={isLoading}
       className={`w-full text-left px-2 py-1.5 rounded-md text-sm flex items-start transition-colors ${
         isActive 
           ? "bg-primary/10 text-primary" 
           : "hover:bg-muted text-foreground"
-      }`}
+      } ${isLoading ? 'cursor-wait' : ''}`}
     >
       <div className="flex items-center">
-        {icon}
+        {isLoading ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : icon}
       </div>
       <div className="flex flex-col">
         <span className="font-medium">{label}</span>
         {description && (
-          <span className="text-xs text-muted-foreground">{description}</span>
+          <span className="text-xs text-muted-foreground">
+            {isLoading ? "Loading..." : description}
+          </span>
         )}
       </div>
-      {isActive && (
+      {isActive && !isLoading && (
         <motion.div 
           layoutId="activeTrack"
           className="ml-auto h-2 w-2 rounded-full bg-primary mt-1" 
         />
+      )}
+      {isLoading && (
+        <div className="ml-auto">
+          <span className="text-xs text-muted-foreground">Loading</span>
+        </div>
       )}
     </button>
   );
