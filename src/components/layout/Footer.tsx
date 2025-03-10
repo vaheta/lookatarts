@@ -1,6 +1,7 @@
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useUI } from "@/contexts/UIContext";
+import { ThemeToggle } from "@/components/ThemeToggle";
 
 interface FooterProps {
   className?: string;
@@ -19,7 +20,9 @@ export function Footer({ className = "" }: FooterProps) {
 
   return (
     <footer className={`text-center py-8 ${className} relative z-40`}>
-      <div className="bottom-4 left-1/2 z-50">
+      <div className="flex items-center justify-center gap-3 bottom-4 left-1/2 z-50">
+        <ThemeToggle />
+        
         <Button
           onClick={handleToggleModal}
           variant={isAboutModalOpen ? "outline" : "outline"}

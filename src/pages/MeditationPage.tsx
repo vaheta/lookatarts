@@ -177,7 +177,7 @@ export function MeditationPage() {
                   contentClass="w-full h-full flex items-center justify-center p-8"
                 >
                   <div
-                    className="relative bg-white rounded shadow-[0_0_40px_rgba(0,0,0,0.1),0_0_12px_rgba(0,0,0,0.05)] border-white w-fit"
+                    className="relative bg-card rounded shadow-[0_0_40px_rgba(0,0,0,0.1),0_0_12px_rgba(0,0,0,0.05)] border-card w-fit"
                     style={{
                       borderWidth: isMobile ? "6px" : "12px",
                       maxHeight: isMobile ? "calc(100vh - 40px)" : "80vh", // Ensure image container doesn't exceed viewport
@@ -191,8 +191,8 @@ export function MeditationPage() {
                       }}
                     >
                       {!isImageLoaded && (
-                        <div className="absolute inset-0 bg-gray-200 overflow-hidden rounded-sm">
-                          <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-gray-200 via-white to-gray-200 animate-[shimmer_1.5s_infinite]"></div>
+                        <div className="absolute inset-0 bg-muted overflow-hidden rounded-sm">
+                          <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-muted via-background to-muted animate-[shimmer_1.5s_infinite]"></div>
                         </div>
                       )}
                       <img

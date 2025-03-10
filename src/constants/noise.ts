@@ -18,7 +18,7 @@ export const DEFAULT_NOISE_CONFIG: NoiseConfig = {
   patternSize: 250,
   patternScaleX: 1,
   patternScaleY: 1,
-  patternRefreshInterval: 2,
+  patternRefreshInterval: 4,
   patternAlpha: 20,
   animated: false,
 };

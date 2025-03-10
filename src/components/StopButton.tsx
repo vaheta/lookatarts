@@ -29,7 +29,7 @@ export function StopButton({ onHover }: StopButtonProps) {
         onClick={handleStop}
         variant="outline"
         size="icon"
-        className="h-12 w-12 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white/90 shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out hover:scale-105 transform motion-safe:hover:scale-105 motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.34,1.56,0.64,1)]"
+        className="h-12 w-12 rounded-full bg-card/80 backdrop-blur-sm hover:bg-card/90 shadow-lg hover:shadow-2xl transition-all duration-300 ease-in-out hover:scale-105 transform motion-safe:hover:scale-105 motion-safe:transition-all motion-safe:duration-300 motion-safe:ease-[cubic-bezier(0.34,1.56,0.64,1)]"
       >
         <Square className="w-4 h-4" />
       </Button>

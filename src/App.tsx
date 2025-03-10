@@ -7,6 +7,7 @@ import { HomePage } from "@/pages/HomePage";
 import { MeditationPage } from "@/pages/MeditationPage";
 import { EndPage } from "@/pages/EndPage";
 import { ViewportProvider } from "@/providers/ViewportProvider";
+import { ThemeProvider } from "@/contexts/ThemeContext";
 
 function App() {
   const {
@@ -64,21 +65,23 @@ function App() {
   }, [meditationState]);
 
   return (
-    <ViewportProvider>
-      {/* About Modal */}
-      <AboutModal />
-      
-      {/* Main Page Content based on meditation state */}
-      <AnimatePresence mode="wait">
-        {meditationState === "completed" ? (
-          <EndPage />
-        ) : meditationState === "meditating" ? (
-          <MeditationPage />
-        ) : (
-          <HomePage />
-        )}
-      </AnimatePresence>
-    </ViewportProvider>
+    <ThemeProvider>
+      <ViewportProvider>
+        {/* About Modal */}
+        <AboutModal />
+        
+        {/* Main Page Content based on meditation state */}
+        <AnimatePresence mode="wait">
+          {meditationState === "completed" ? (
+            <EndPage />
+          ) : meditationState === "meditating" ? (
+            <MeditationPage />
+          ) : (
+            <HomePage />
+          )}
+        </AnimatePresence>
+      </ViewportProvider>
+    </ThemeProvider>
   );
 }
 

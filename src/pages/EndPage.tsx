@@ -44,13 +44,13 @@ export function EndPage() {
               <div className="space-y-4 text-center">
                 <motion.h1
                   variants={childVariant}
-                  className="text-4xl font-serif text-black text-center"
+                  className="text-4xl font-serif text-foreground text-center"
                 >
                   You've meditated for {formatElapsedTime()}
                 </motion.h1>
                 <motion.p
                   variants={childVariant}
-                  className="text-gray-600"
+                  className="text-muted-foreground"
                 >
                   {percentageCompleted}% of planned session
                 </motion.p>
@@ -65,7 +65,7 @@ export function EndPage() {
               <div className="grid grid-cols-2 gap-x-8 py-4 px-4 gap-y-6 max-w-2xl mx-auto text-sm">
                 {todaysPic.description.name && (
                   <div>
-                    <p className="text-gray-500">Title</p>
+                    <p className="text-muted-foreground">Title</p>
                     <p className="">
                       {todaysPic.description.name}
                     </p>
@@ -73,7 +73,7 @@ export function EndPage() {
                 )}
                 {todaysPic.description.artist && (
                   <div>
-                    <p className="text-gray-500">Artist</p>
+                    <p className="text-muted-foreground">Artist</p>
                     <p className="">
                       {todaysPic.description.artist}
                     </p>
@@ -81,7 +81,7 @@ export function EndPage() {
                 )}
                 {todaysPic.description.date && (
                   <div>
-                    <p className="text-gray-500">Date</p>
+                    <p className="text-muted-foreground">Date</p>
                     <p className="">
                       {todaysPic.description.date}
                     </p>
@@ -89,7 +89,7 @@ export function EndPage() {
                 )}
                 {todaysPic.description.dimensions && (
                   <div>
-                    <p className="text-gray-500">Dimensions</p>
+                    <p className="text-muted-foreground">Dimensions</p>
                     <p className="">
                       {todaysPic.description.dimensions}
                     </p>
@@ -97,7 +97,7 @@ export function EndPage() {
                 )}
                 {todaysPic.description.about && (
                   <motion.div variants={childVariant} className="col-span-2 max-w-2xl mx-auto">
-                    <p className="text-gray-500 text-sm mb-2">About</p>
+                    <p className="text-muted-foreground text-sm mb-2">About</p>
                     <p className="text-sm leading-relaxed">
                       {todaysPic.description.about}
                     </p>
@@ -105,7 +105,7 @@ export function EndPage() {
                 )}
                 {todaysPic.description.repository && (
                   <motion.div variants={childVariant} className="col-span-2">
-                    <p className="text-gray-500">Repository</p>
+                    <p className="text-muted-foreground">Repository</p>
                     <Button
                       variant="link"
                       className="p-0 h-auto"

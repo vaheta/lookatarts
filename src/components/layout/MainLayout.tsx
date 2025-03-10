@@ -17,7 +17,7 @@ export function MainLayout({
   noiseEnabled = DEFAULT_NOISE_CONFIG.enabled,
 }: MainLayoutProps) {
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-bl from-stone-50 to-stone-200 text-black relative">
+    <div className="min-h-screen flex flex-col bg-gradient-to-bl from-background to-muted text-foreground relative">
       {/* Noise background - simplified */}
       {noiseEnabled && <Noise />}
       

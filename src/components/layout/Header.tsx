@@ -1,3 +1,5 @@
+import { ThemeToggle } from "@/components/ThemeToggle";
+
 interface HeaderProps {
   className?: string;
 }
@@ -5,7 +7,7 @@ interface HeaderProps {
 export function Header({ className = "" }: HeaderProps) {
   return (
     <header className={`text-center py-8 ${className}`}>
-      <p className="text-sm text-gray-500">lookatarts.com</p>
+      <p className="text-sm text-muted-foreground">lookatarts.com</p>
     </header>
   );
 } 
