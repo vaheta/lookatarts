@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useCallback, ReactNode, useEffect } from "react";
 import { useTimer } from "@/hooks/useTimer";
+import { useFullscreen, FullscreenError } from "@/hooks/useFullscreen";
 import { TodaysPic } from "@/types";
 
 type MeditationState = "idle" | "meditating" | "completed";
@@ -40,6 +41,9 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
   const [todaysPic, setTodaysPic] = useState<TodaysPic | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Fullscreen handling
+  const { requestFullscreen, exitFullscreen, isFullscreen } = useFullscreen();
+
   // Timer integration
   const { 
     elapsedTime, 
@@ -73,6 +77,13 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
     // Reset body overflow - important for mobile
     document.body.style.overflow = "hidden";
     
+    // Try to enter fullscreen mode
+    requestFullscreen(document.documentElement)
+      .catch((err: FullscreenError) => {
+        // If fullscreen fails, continue with meditation anyway
+        console.warn('Failed to enter fullscreen:', err.message);
+      });
+    
     // Small delay to ensure scroll reset happens before any animations
     setTimeout(() => {
       resetTimer();
@@ -82,14 +93,22 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
       // Reset scroll position again after state change
       window.scrollTo(0, 0);
     }, 10);
-  }, [resetTimer]);
+  }, [resetTimer, requestFullscreen]);
 
   const stopMeditation = useCallback((resetUIStates?: () => void) => {
+    // Exit fullscreen if we're in it
+    if (isFullscreen()) {
+      exitFullscreen()
+        .catch((err: FullscreenError) => {
+          console.warn('Failed to exit fullscreen:', err.message);
+        });
+    }
+    
     setMeditationState("completed");
     if (resetUIStates) {
       resetUIStates();
     }
-  }, []);
+  }, [exitFullscreen, isFullscreen]);
 
   const resetMeditation = useCallback(() => {
     setMeditationState("idle");
