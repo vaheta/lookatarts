@@ -7,17 +7,26 @@ import { useIsMobile } from "@/hooks/useIsMobile";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { MeditationControlsOverlay } from "@/components/MeditationControlsOverlay";
 import { PanAnimation } from "@/components/PanAnimation";
-import { useEffect, useState, useLayoutEffect } from "react";
+import { AutoPanZoom } from "@/components/AutoPanZoom";
+import { useEffect, useState, useLayoutEffect, useRef, useCallback } from "react";
 
 export function MeditationPage() {
-  const { todaysPic, handleInteraction, formatElapsedAndTotalTime, hasInteracted, showPanAnimation, meditationState } =
-    useMeditation();
+  const { 
+    todaysPic, 
+    handleInteraction, 
+    formatElapsedAndTotalTime, 
+    hasInteracted, 
+    showPanAnimation, 
+    meditationState,
+    isAutoMode 
+  } = useMeditation();
   const { isImageLoaded, setIsImageLoaded } = useUI();
   const isMobile = useIsMobile();
   const [isMobileDetectionComplete, setIsMobileDetectionComplete] = useState(false);
-  const [centerViewFn, setCenterViewFn] = useState<((scale?: number | undefined, animationTime?: number | undefined) => void) | null>(null);
+  const centerViewFnRef = useRef<((scale?: number | undefined, animationTime?: number | undefined) => void) | null>(null);
   const [imageHasLoaded, setImageHasLoaded] = useState(false);
   const [showEducationalTip, setShowEducationalTip] = useState(false);
+  const transformWrapperRef = useRef<any>(null);
 
   // Set a flag once mobile detection is complete
   useEffect(() => {
@@ -30,6 +39,42 @@ export function MeditationPage() {
       setShowEducationalTip(false);
     }
   }, [meditationState]);
+
+  // Memoize the centerView callback to avoid unnecessary re-renders
+  const handleCenterView = useCallback((centerView: (scale?: number, animationTime?: number) => void) => {
+    centerViewFnRef.current = centerView;
+  }, []);
+
+  // Handle auto mode transform updates
+  const handleAutoTransform = useCallback(({ x, y, scale }: { x: number; y: number; scale: number }) => {
+    if (!transformWrapperRef.current || !isAutoMode || !imageHasLoaded) return;
+
+    const wrapper = transformWrapperRef.current;
+    
+    wrapper.setTransform(
+      x, // X position
+      y, // Y position
+      scale, // Scale is already calculated with base scale in AutoPanZoom
+      50 // Use a very short transition for smooth animation
+    );
+  }, [isAutoMode, imageHasLoaded]);
+
+  // Handle image load with memoization
+  const handleImageLoad = useCallback(() => {
+    setIsImageLoaded(true);
+    setImageHasLoaded(true);
+    
+    // Set initial scale and center the image
+    if (centerViewFnRef.current) {
+      const isFullscreen = document.fullscreenElement !== null;
+      const baseScale = isMobile 
+        ? (isFullscreen ? 4 : 3)
+        : (isFullscreen ? 3 : 2);
+      
+      centerViewFnRef.current(baseScale, 0);
+      setShowEducationalTip(true);
+    }
+  }, [isMobile, setIsImageLoaded]);
 
   // Update viewport height calculation on mount and when meditation state changes
   useLayoutEffect(() => {
@@ -96,9 +141,40 @@ export function MeditationPage() {
     };
   }, [meditationState]);
 
+  // Handle screen size changes
+  useEffect(() => {
+    if (!imageHasLoaded) return;
+
+    const handleResize = () => {
+      // Recenter the image when screen size changes
+      if (centerViewFnRef.current) {
+        const baseScale = isMobile ? 2 : 1;
+        centerViewFnRef.current(baseScale, 0);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    window.addEventListener('fullscreenchange', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+      window.removeEventListener('fullscreenchange', handleResize);
+    };
+  }, [imageHasLoaded, isMobile]);
+
+  // Log state changes for debugging
+  useEffect(() => {
+    console.log('[MeditationPage] State:', {
+      isAutoMode,
+      meditationState,
+      hasInteracted,
+      isImageLoaded
+    });
+  }, [isAutoMode, meditationState, hasInteracted, isImageLoaded]);
+
   // Recenter image when window resizes or orientation changes
   useEffect(() => {
-    if (!centerViewFn || !imageHasLoaded) return;
+    if (!centerViewFnRef.current || !imageHasLoaded) return;
 
     const handleResize = () => {
       // Update the viewport height variable first
@@ -108,7 +184,9 @@ export function MeditationPage() {
       // Add a slightly longer delay to ensure viewport calculations are complete
       setTimeout(() => {
         // Use the appropriate scale after image has loaded (2 for mobile, 1 for desktop)
-        centerViewFn(isMobile ? 2 : 1, 0);
+        if (centerViewFnRef.current) {
+          centerViewFnRef.current(isMobile ? 2 : 1, 0);
+        }
       }, 100);
     };
 
@@ -125,7 +203,7 @@ export function MeditationPage() {
       window.removeEventListener('orientationchange', handleResize);
       document.removeEventListener('visibilitychange', handleResize);
     };
-  }, [centerViewFn, imageHasLoaded, isMobile]);
+  }, [imageHasLoaded, isMobile]);
 
   // Don't render until we have the image and mobile detection is complete
   if (!todaysPic || !isMobileDetectionComplete) return null;
@@ -157,27 +235,31 @@ export function MeditationPage() {
 
         <div className="relative w-full h-full">
           <TransformWrapper
-            initialScale={isMobile ? 0.7 : 1}
-            minScale={0.8}
-            maxScale={isMobile ? 6 : 4}
+            ref={transformWrapperRef}
+            initialScale={1}
+            minScale={1}
+            maxScale={isMobile ? 8 : 6}
             smooth={true}
             onPanningStart={handleInteraction}
             onZoomStart={handleInteraction}
             centerOnInit={true}
+            limitToBounds={true}
+            alignmentAnimation={{ sizeX: 0, sizeY: 0, velocityAlignmentTime: 0 }}
+            velocityAnimation={{ equalToMove: true, sensitivity: 0.5, animationTime: 800 }}
           >
             {({ centerView }) => {
               // Store centerView function for use in resize handler
-              if (!centerViewFn) {
-                setCenterViewFn(() => centerView);
+              if (centerViewFnRef.current !== centerView) {
+                handleCenterView(centerView);
               }
               
               return (
                 <TransformComponent
-                  wrapperClass="!w-full real-h-screen" 
-                  contentClass="w-full h-full flex items-center justify-center p-8"
+                  wrapperClass="!w-full !h-full" 
+                  contentClass="w-full h-full flex items-center justify-center"
                 >
                   <div
-                    className="relative bg-card rounded shadow-[0_0_40px_rgba(0,0,0,0.1),0_0_12px_rgba(0,0,0,0.05)] border-card w-fit"
+                    className="relative bg-card rounded shadow-[0_0_40px_rgba(0,0,0,0.1),0_0_12px_rgba(0,0,0,0.05)] border-card w-fit mx-auto my-auto"
                     style={{
                       borderWidth: isMobile ? "6px" : "12px",
                       maxHeight: isMobile ? "calc(100vh - 40px)" : "80vh", // Ensure image container doesn't exceed viewport
@@ -204,35 +286,12 @@ export function MeditationPage() {
                         style={{
                           maxHeight: isMobile ? "calc(100vh - 60px)" : "75vh", // Ensure image doesn't exceed viewport
                         }}
-                        onLoad={() => {
-                          setIsImageLoaded(true);
-                          setImageHasLoaded(true);
-                          
-                          // First center with no animation
-                          centerView(undefined, 0);
-                          
-                          // Update the viewport height before animation
-                          const vh = window.innerHeight * 0.01;
-                          document.documentElement.style.setProperty('--vh', `${vh}px`);
-                          
-                          // Then animate to the appropriate scale after a short delay
-                          setTimeout(() => {
-                            if (isMobile) {
-                              // Animate zoom in on mobile - smooth transition from 0.5 to 2
-                              centerView(2, 800);
-                              
-                              // Show the educational tip in the middle of the zoom animation
-                              setTimeout(() => {
-                                setShowEducationalTip(true);
-                              }, 300); // Appears when zoom is halfway through
-                            } else {
-                              // For desktop, show the educational tip after a short delay
-                              setTimeout(() => {
-                                setShowEducationalTip(true);
-                              }, 500);
-                            }
-                          }, 100);
-                        }}
+                        onLoad={handleImageLoad}
+                      />
+                      {/* Auto Pan-Zoom Animation */}
+                      <AutoPanZoom 
+                        isActive={isAutoMode && meditationState === "meditating"} 
+                        onTransform={handleAutoTransform}
                       />
                     </div>
                   </div>

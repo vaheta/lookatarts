@@ -13,6 +13,7 @@ interface MeditationContextType {
   duration: string;
   todaysPic: TodaysPic | null;
   isLoading: boolean;
+  isAutoMode: boolean;
   
   // Timer state
   elapsedTime: number;
@@ -40,6 +41,8 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
   const [showPanAnimation, setShowPanAnimation] = useState(false);
   const [todaysPic, setTodaysPic] = useState<TodaysPic | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isAutoMode, setIsAutoMode] = useState(true);
+  const [lastInteractionTime, setLastInteractionTime] = useState(0);
 
   // Fullscreen handling
   const { requestFullscreen, exitFullscreen, isFullscreen } = useFullscreen();
@@ -56,6 +59,21 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
     meditationState,
     () => setMeditationState("completed")
   );
+
+  // Handle auto mode toggle based on user interaction
+  useEffect(() => {
+    if (!hasInteracted) return;
+
+    // Set a timer to re-enable auto mode after 3 seconds of no interaction
+    const timer = setTimeout(() => {
+      if (Date.now() - lastInteractionTime >= 3000) {
+        setIsAutoMode(true);
+        setHasInteracted(false);
+      }
+    }, 3000);
+
+    return () => clearTimeout(timer);
+  }, [hasInteracted, lastInteractionTime]);
 
   // Handle pan animation visibility based on meditation state and elapsed time
   useEffect(() => {
@@ -89,6 +107,7 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
       resetTimer();
       setMeditationState("meditating");
       setHasInteracted(false);
+      setIsAutoMode(true);
       
       // Reset scroll position again after state change
       window.scrollTo(0, 0);
@@ -105,6 +124,7 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
     }
     
     setMeditationState("completed");
+    setIsAutoMode(false);
     if (resetUIStates) {
       resetUIStates();
     }
@@ -113,10 +133,13 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
   const resetMeditation = useCallback(() => {
     setMeditationState("idle");
     setHasInteracted(false);
+    setIsAutoMode(true);
   }, []);
 
   const handleInteraction = useCallback(() => {
     setHasInteracted(true);
+    setIsAutoMode(false);
+    setLastInteractionTime(Date.now());
   }, []);
 
   const value = {
@@ -126,6 +149,7 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
     duration,
     todaysPic,
     isLoading,
+    isAutoMode,
     elapsedTime,
     formatElapsedTime,
     formatElapsedAndTotalTime,

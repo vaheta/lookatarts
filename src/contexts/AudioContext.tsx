@@ -19,10 +19,10 @@ const AudioContext = createContext<AudioContextType | undefined>(undefined);
 
 // Define audio file paths using the actual file names
 const audioTracks = {
-  ambient: "/audio/Ambient Morning.mp3",
-  rain: "/audio/Summer Rain.mp3",
-  tone: "/audio/3 hz tone.mp3",
-  water: "/audio/Old Water.mp3",
+  ambient: "/audio/ambient-morning.mp3",
+  rain: "/audio/summer-rain.mp3",
+  tone: "/audio/3hz-tone.mp3",
+  water: "/audio/old-water.mp3",
 };
 
 // Create the provider component

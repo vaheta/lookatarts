@@ -1,28 +1,41 @@
-# Fullstack Repl Example
+# lookatarts.com — Daily Visual Meditation
 
-A full-stack application demonstrating the integration of a React frontend with a FastAPI backend on Replit.
+Look at one artwork a day, for a few unhurried minutes. Artworks come from the
+Met Museum's open access collection.
 
-![CleanShot 2024-08-21 at 09](public/screenshot.png)
+## Architecture (Cloudflare)
 
-To get started, just click "Run." Or check out the live demo [here](https://matts-single-fullstack-repl.replit.app/).
+Everything runs on Cloudflare in a single Worker:
 
-## How it works
+- **Frontend**: React + Vite + Tailwind, served as static assets ([src/](src/))
+- **API**: Hono Worker ([cf/worker.ts](cf/worker.ts)) — today's artwork metadata,
+  artwork/audio serving, meditation timer events
+- **Database**: D1 `lookatarts-db` (artwork schedule, timer events)
+- **Media**: R2 `lookatarts-images` (560 artworks + 4 ambient audio tracks)
 
-The frontend is powered by a React application via Vite. When you click "Run," the Vite development server is what you'll see in the Webview. The counter increments by communicating with the [Python backend](/main.py). 
+## Development
 
-You can see the Run commands in the [.replit](/.replit) file.
+```sh
+npm install
+npx vite build          # build the frontend into dist/
+npx wrangler dev        # run the Worker locally (local D1/R2 simulators)
+```
 
-Upon deployment, we build our Vite project into a set of static files, which are hosted by FastAPI. [This](/main.py:23:8) piece of logic tells our app "if this Repl is a deployment, host the static files built by vite on port 5173 _in addition_ to acting as a backend."
-
-If you wanted to use a frontend server rather than a set of static files, you could modify the .replit file to run that server and remove this code.
-
-The build and deploy commands are defined [here](/.replit:14).
-
-## API Endpoints
-
-- GET `/api/counter`: Retrieve the current counter value
-- POST `/api/counter`: Increment the counter
+Local D1 schema/data live in [cf/schema.sql](cf/schema.sql); regenerate the data
+import from CSV exports with [cf/convert-csv.mjs](cf/convert-csv.mjs).
 
 ## Deployment
 
-The app is configured for easy deployment on Replit. The backend serves the built frontend files in production.
+Pushing to `main` deploys automatically via GitHub Actions
+([.github/workflows/deploy.yml](.github/workflows/deploy.yml)).
+Manual deploy: `npx wrangler deploy` (needs `CLOUDFLARE_API_TOKEN`).
+
+## Legacy
+
+[legacy-replit-backend/](legacy-replit-backend/) contains the original FastAPI
+backend and the Met Museum scraper from the Replit era (replaced by the Worker).
+The scraper's source dataset is the [Met open access CSV](https://github.com/metmuseum/openaccess)
+(not committed here — ~300 MB).
+
+The ambient audio mp3 files are not committed either (up to 40 MB each); they
+live in the `lookatarts-images` R2 bucket under `audio/`.

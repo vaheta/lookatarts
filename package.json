@@ -19,6 +19,7 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "framer-motion": "^11.0.8",
+    "hono": "^4.12.28",
     "lottie-react": "^2.4.1",
     "lucide-react": "^0.428.0",
     "react": "^18.3.1",
@@ -27,7 +28,8 @@
     "react-zoom-pan-pinch": "^3.4.2",
     "serve": "^14.2.3",
     "tailwind-merge": "^2.5.2",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "wrangler": "^4.107.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",

@@ -1,0 +1,27 @@
+{
+  "name": "lookatarts",
+  "main": "cf/worker.ts",
+  "compatibility_date": "2026-06-01",
+  "assets": {
+    "directory": "dist",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/health", "/audio/*"]
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "lookatarts-db",
+      "database_id": "d0536575-9365-4303-b2d8-eee3cd7e4fd6"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "ARTWORKS",
+      "bucket_name": "lookatarts-images"
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}

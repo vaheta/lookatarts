@@ -22,3 +22,12 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Cloudflare / migration artifacts
+.dev.vars
+.wrangler/
+.cache/
+.upm/
+.config/
+cf/data.sql
+cf/audio/*.mp3
