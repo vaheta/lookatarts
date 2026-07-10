@@ -1,5 +1,6 @@
 {
   "name": "lookatarts",
+  "account_id": "9c366cf0067a12a4b56088caa30d1be0",
   "main": "cf/worker.ts",
   "compatibility_date": "2026-06-01",
   "assets": {
