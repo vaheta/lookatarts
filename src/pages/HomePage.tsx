@@ -50,7 +50,7 @@ export function HomePage() {
           variants={childVariant}
           className="text-3xl md:text-4xl font-serif text-foreground text-center"
         >
-          Daily Visual Meditation 🚀
+          Daily Visual Meditation
         </motion.h1>
         <motion.div
           variants={childVariant}
