@@ -46,7 +46,6 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
   const [todaysPic, setTodaysPic] = useState<TodaysPic | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAutoMode, setIsAutoMode] = useState(true);
-  const [lastInteractionTime, setLastInteractionTime] = useState(0);
 
   // Fullscreen handling
   const { requestFullscreen, exitFullscreen, isFullscreen } = useFullscreen();
@@ -64,20 +63,9 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
     () => setMeditationState("completed")
   );
 
-  // Handle auto mode toggle based on user interaction
-  useEffect(() => {
-    if (!hasInteracted) return;
-
-    // Set a timer to re-enable auto mode after 3 seconds of no interaction
-    const timer = setTimeout(() => {
-      if (Date.now() - lastInteractionTime >= 3000) {
-        setIsAutoMode(true);
-        setHasInteracted(false);
-      }
-    }, 3000);
-
-    return () => clearTimeout(timer);
-  }, [hasInteracted, lastInteractionTime]);
+  // Once the user takes control (pan/zoom), auto-pan stays off for the rest of
+  // the session; it used to resume after 3s of stillness, which felt like the
+  // painting fighting the user. A new meditation re-enables it.
 
   // Handle pan animation visibility based on meditation state and elapsed time
   useEffect(() => {
@@ -142,7 +130,6 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
     setHasInteracted(true);
     setPanTipDismissed(true);
     setIsAutoMode(false);
-    setLastInteractionTime(Date.now());
   }, []);
 
   const value = {
