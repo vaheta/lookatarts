@@ -39,6 +39,10 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
   const [duration, setDuration] = useState("600"); // 10 minutes in seconds
   const [hasInteracted, setHasInteracted] = useState(false);
   const [showPanAnimation, setShowPanAnimation] = useState(false);
+  // Once the user pans/zooms, keep the tutorial hidden for the rest of the
+  // session (hasInteracted gets reset by the auto-mode timer, so it can't be
+  // used for this).
+  const [panTipDismissed, setPanTipDismissed] = useState(false);
   const [todaysPic, setTodaysPic] = useState<TodaysPic | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAutoMode, setIsAutoMode] = useState(true);
@@ -77,15 +81,12 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
 
   // Handle pan animation visibility based on meditation state and elapsed time
   useEffect(() => {
-    if (meditationState === "meditating") {
+    if (meditationState === "meditating" && !panTipDismissed && elapsedTime <= 30) {
       setShowPanAnimation(true);
-      if (elapsedTime > 30) {
-        setShowPanAnimation(false);
-      }
     } else {
       setShowPanAnimation(false);
     }
-  }, [meditationState, elapsedTime]);
+  }, [meditationState, elapsedTime, panTipDismissed]);
 
   // Action handlers
   const startMeditation = useCallback(() => {
@@ -107,6 +108,7 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
       resetTimer();
       setMeditationState("meditating");
       setHasInteracted(false);
+      setPanTipDismissed(false);
       setIsAutoMode(true);
       
       // Reset scroll position again after state change
@@ -138,6 +140,7 @@ export function MeditationProvider({ children }: { children: ReactNode }) {
 
   const handleInteraction = useCallback(() => {
     setHasInteracted(true);
+    setPanTipDismissed(true);
     setIsAutoMode(false);
     setLastInteractionTime(Date.now());
   }, []);
